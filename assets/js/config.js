@@ -7,7 +7,10 @@ const CONFIG = {
     contact: {
         email: 'kardinalalpha@protonmail.com', // À remplacer par votre email professionnel
         phone: '', // Optionnel : '+262 693 20 57 27'
-        location: 'Saint-Denis, La Réunion'
+        location: 'Saint-Denis, La Réunion',
+        // Formspree : créez un compte gratuit sur https://formspree.io
+        // puis remplacez la valeur ci-dessous par votre endpoint (ex: 'https://formspree.io/f/XXXXXXXX')
+        formspree: '', // Laisser vide = fallback mailto
     },
 
     // Réseaux sociaux (ajouter/supprimer selon besoins)

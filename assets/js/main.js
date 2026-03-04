@@ -196,7 +196,32 @@
     };
 
     // ========================================================
-    // Formulaire de contact (mailto)
+    // Toast notification
+    // ========================================================
+    const Toast = {
+        show(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msg   = document.getElementById('toast-message');
+            const icon  = document.getElementById('toast-icon');
+            if (!toast || !msg || !icon) return;
+
+            toast.className = `toast toast--${type}`;
+            msg.textContent = message;
+
+            if (type === 'success') {
+                icon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+            } else {
+                icon.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
+            }
+
+            toast.classList.add('toast--show');
+            clearTimeout(this._timer);
+            this._timer = setTimeout(() => toast.classList.remove('toast--show'), 4000);
+        }
+    };
+
+    // ========================================================
+    // Formulaire de contact (Formspree)
     // ========================================================
     const ContactForm = {
         init() {
@@ -205,26 +230,131 @@
                 this.bindEvents();
             }
         },
-        
+
         bindEvents() {
             this.form.addEventListener('submit', (e) => this.handleSubmit(e));
         },
-        
-        handleSubmit(e) {
+
+        async handleSubmit(e) {
             e.preventDefault();
-            
-            const formData = new FormData(this.form);
-            const name = formData.get('name') || '';
-            const email = formData.get('email') || '';
-            const subject = formData.get('subject') || 'Contact depuis le site';
-            const message = formData.get('message') || '';
-            
-            // Construction du mailto
-            const contactEmail = typeof CONFIG !== 'undefined' ? CONFIG.contact.email : 'contact@kardinal-solutions.re';
-            const body = `Nom: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-            const mailtoLink = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            
-            window.location.href = mailtoLink;
+
+            const btn = this.form.querySelector('[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Envoi en cours…';
+
+            // Récupère l'endpoint Formspree depuis config.js
+            const endpoint = (typeof CONFIG !== 'undefined' && CONFIG.contact.formspree)
+                ? CONFIG.contact.formspree
+                : null;
+
+            if (!endpoint) {
+                // Fallback mailto si pas encore configuré
+                const formData = new FormData(this.form);
+                const name    = formData.get('name') || '';
+                const email   = formData.get('email') || '';
+                const subject = formData.get('subject') || 'Contact depuis le site';
+                const message = formData.get('message') || '';
+                const contactEmail = typeof CONFIG !== 'undefined' ? CONFIG.contact.email : 'kardinalalpha@protonmail.com';
+                const body = `Nom: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+                window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                return;
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: new FormData(this.form),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    Toast.show('Message envoyé avec succès ! Je vous répondrai rapidement.', 'success');
+                    this.form.reset();
+                } else {
+                    throw new Error('Erreur serveur');
+                }
+            } catch {
+                Toast.show('Une erreur est survenue. Veuillez réessayer ou m\'écrire directement par email.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    };
+
+    // ========================================================
+    // Bouton retour en haut
+    // ========================================================
+    const BackToTop = {
+        init() {
+            this.btn = document.getElementById('back-to-top');
+            if (!this.btn) return;
+            this.bindEvents();
+        },
+
+        bindEvents() {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    this.btn.classList.add('visible');
+                } else {
+                    this.btn.classList.remove('visible');
+                }
+            }, { passive: true });
+
+            this.btn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+                });
+            });
+        }
+    };
+
+    // ========================================================
+    // Typewriter dans le héro
+    // ========================================================
+    const Typewriter = {
+        phrases: ['Développeur Web', 'Développeur Symfony', 'Technicien PC', 'Freelance IoT'],
+        current: 0,
+        charIndex: 0,
+        deleting: false,
+        SPEED_TYPE: 80,
+        SPEED_DELETE: 45,
+        PAUSE_END: 2000,
+        PAUSE_START: 400,
+
+        init() {
+            this.el = document.getElementById('typewriter-text');
+            if (!this.el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            this.tick();
+        },
+
+        tick() {
+            const phrase = this.phrases[this.current];
+
+            if (this.deleting) {
+                this.charIndex--;
+                this.el.textContent = phrase.substring(0, this.charIndex);
+            } else {
+                this.charIndex++;
+                this.el.textContent = phrase.substring(0, this.charIndex);
+            }
+
+            let delay = this.deleting ? this.SPEED_DELETE : this.SPEED_TYPE;
+
+            if (!this.deleting && this.charIndex === phrase.length) {
+                delay = this.PAUSE_END;
+                this.deleting = true;
+            } else if (this.deleting && this.charIndex === 0) {
+                this.deleting = false;
+                this.current = (this.current + 1) % this.phrases.length;
+                delay = this.PAUSE_START;
+            }
+
+            setTimeout(() => this.tick(), delay);
         }
     };
 
@@ -263,6 +393,8 @@
         ScrollReveal.init();
         ContactForm.init();
         SmoothScroll.init();
+        BackToTop.init();
+        Typewriter.init();
     });
 
 })();
