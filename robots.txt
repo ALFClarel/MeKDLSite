@@ -1,0 +1,5 @@
+# KarDinaL_Solutions - robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://me.kdlsolutions.re/sitemap.xml
