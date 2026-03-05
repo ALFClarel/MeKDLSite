@@ -7,85 +7,97 @@
     'use strict';
 
     // ========================================================
+    // Media queries centralisées (Refactor #2)
+    // Évite les appels dupliqués à window.matchMedia()
+    // ========================================================
+    const media = {
+        reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)'),
+        darkScheme:    window.matchMedia('(prefers-color-scheme: dark)'),
+    };
+
+    // ========================================================
     // Gestion du thème (clair/sombre)
     // ========================================================
     const ThemeManager = {
         STORAGE_KEY: 'kardinal-theme',
-        
+
+        cacheDom() {
+            this.toggle = document.querySelector('.theme-toggle');
+        },
+
         init() {
+            this.cacheDom();
             const savedTheme = localStorage.getItem(this.STORAGE_KEY);
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-            
+            const theme = savedTheme || (media.darkScheme.matches ? 'dark' : 'light');
             this.setTheme(theme, false);
             this.bindEvents();
         },
-        
+
         setTheme(theme, save = true) {
             document.documentElement.setAttribute('data-theme', theme);
             if (save) {
                 localStorage.setItem(this.STORAGE_KEY, theme);
             }
-            
+
             // Mise à jour de l'accessibilité du bouton
-            const toggle = document.querySelector('.theme-toggle');
-            if (toggle) {
-                toggle.setAttribute('aria-label', 
+            if (this.toggle) {
+                this.toggle.setAttribute('aria-label',
                     theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'
                 );
             }
         },
-        
+
         toggle() {
             const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            this.setTheme(next);
+            this.setTheme(current === 'dark' ? 'light' : 'dark');
         },
-        
+
         bindEvents() {
-            const toggle = document.querySelector('.theme-toggle');
-            if (toggle) {
-                toggle.addEventListener('click', () => this.toggle());
+            if (this.toggle) {
+                this.toggle.addEventListener('click', () => this.toggle());
             }
-            
+
             // Écoute les changements de préférence système
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            media.darkScheme.addEventListener('change', (e) => {
                 if (!localStorage.getItem(this.STORAGE_KEY)) {
                     this.setTheme(e.matches ? 'dark' : 'light', false);
                 }
             });
-        }
+        },
     };
 
     // ========================================================
     // Navigation mobile
     // ========================================================
     const MobileNav = {
-        init() {
+        cacheDom() {
             this.toggle = document.querySelector('.nav__toggle');
-            this.menu = document.querySelector('.nav__list');
-            this.links = document.querySelectorAll('.nav__link');
-            
+            this.menu   = document.querySelector('.nav__list');
+            this.links  = document.querySelectorAll('.nav__link');
+        },
+
+        init() {
+            this.cacheDom();
             if (this.toggle && this.menu) {
                 this.bindEvents();
             }
         },
-        
+
         bindEvents() {
             this.toggle.addEventListener('click', () => this.toggleMenu());
-            
+
             // Fermer le menu au clic sur un lien
             this.links.forEach(link => {
                 link.addEventListener('click', () => this.closeMenu());
             });
-            
+
             // Fermer le menu au clic à l'extérieur
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.nav') && this.isOpen()) {
                     this.closeMenu();
                 }
             });
-            
+
             // Fermer le menu avec Escape
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.isOpen()) {
@@ -94,40 +106,43 @@
                 }
             });
         },
-        
+
         isOpen() {
             return this.menu.classList.contains('active');
         },
-        
+
         toggleMenu() {
             const isOpen = this.isOpen();
             this.menu.classList.toggle('active');
             this.toggle.setAttribute('aria-expanded', !isOpen);
         },
-        
+
         closeMenu() {
             this.menu.classList.remove('active');
             this.toggle.setAttribute('aria-expanded', 'false');
-        }
+        },
     };
 
     // ========================================================
     // Navigation active sur scroll
     // ========================================================
     const ScrollSpy = {
-        init() {
+        cacheDom() {
             this.sections = document.querySelectorAll('section[id]');
             this.navLinks = document.querySelectorAll('.nav__link[href^="#"]');
-            
+        },
+
+        init() {
+            this.cacheDom();
             if (this.sections.length && this.navLinks.length) {
                 this.bindEvents();
                 this.update();
             }
         },
-        
+
         bindEvents() {
             let ticking = false;
-            
+
             window.addEventListener('scroll', () => {
                 if (!ticking) {
                     requestAnimationFrame(() => {
@@ -138,15 +153,15 @@
                 }
             });
         },
-        
+
         update() {
             const scrollPos = window.scrollY + 100;
-            
+
             this.sections.forEach(section => {
-                const top = section.offsetTop;
+                const top    = section.offsetTop;
                 const height = section.offsetHeight;
-                const id = section.getAttribute('id');
-                
+                const id     = section.getAttribute('id');
+
                 if (scrollPos >= top && scrollPos < top + height) {
                     this.navLinks.forEach(link => {
                         link.classList.remove('active');
@@ -156,7 +171,7 @@
                     });
                 }
             });
-        }
+        },
     };
 
     // ========================================================
@@ -164,7 +179,7 @@
     // ========================================================
     const ScrollReveal = {
         init() {
-            if ('IntersectionObserver' in window && !this.prefersReducedMotion()) {
+            if ('IntersectionObserver' in window && !media.reducedMotion.matches) {
                 this.observe();
             } else {
                 // Fallback : afficher tous les éléments
@@ -173,11 +188,7 @@
                 });
             }
         },
-        
-        prefersReducedMotion() {
-            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        },
-        
+
         observe() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -188,11 +199,11 @@
                 });
             }, {
                 threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                rootMargin: '0px 0px -50px 0px',
             });
-            
+
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }
+        },
     };
 
     // ========================================================
@@ -217,15 +228,19 @@
             toast.classList.add('toast--show');
             clearTimeout(this._timer);
             this._timer = setTimeout(() => toast.classList.remove('toast--show'), 4000);
-        }
+        },
     };
 
     // ========================================================
     // Formulaire de contact (Formspree)
     // ========================================================
     const ContactForm = {
-        init() {
+        cacheDom() {
             this.form = document.querySelector('.contact__form');
+        },
+
+        init() {
+            this.cacheDom();
             if (this.form) {
                 this.bindEvents();
             }
@@ -238,9 +253,12 @@
         async handleSubmit(e) {
             e.preventDefault();
 
+            // Protection DOM : s'assure que le bouton existe (Refactor #3)
             const btn = this.form.querySelector('[type="submit"]');
+            if (!btn) return;
+
             const originalText = btn.innerHTML;
-            btn.disabled = true;
+            btn.disabled  = true;
             btn.innerHTML = '<svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Envoi en cours…';
 
             // Récupère l'endpoint Formspree depuis config.js
@@ -250,15 +268,15 @@
 
             if (!endpoint) {
                 // Fallback mailto si pas encore configuré
-                const formData = new FormData(this.form);
-                const name    = formData.get('name') || '';
-                const email   = formData.get('email') || '';
-                const subject = formData.get('subject') || 'Contact depuis le site';
-                const message = formData.get('message') || '';
+                const formData     = new FormData(this.form);
+                const name         = formData.get('name')    || '';
+                const email        = formData.get('email')   || '';
+                const subject      = formData.get('subject') || 'Contact depuis le site';
+                const message      = formData.get('message') || '';
                 const contactEmail = typeof CONFIG !== 'undefined' ? CONFIG.contact.email : 'kardinalalpha@protonmail.com';
-                const body = `Nom: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+                const body         = `Nom: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
                 window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                btn.disabled = false;
+                btn.disabled  = false;
                 btn.innerHTML = originalText;
                 return;
             }
@@ -267,7 +285,7 @@
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     body: new FormData(this.form),
-                    headers: { 'Accept': 'application/json' }
+                    headers: { 'Accept': 'application/json' },
                 });
 
                 if (response.ok) {
@@ -279,38 +297,38 @@
             } catch {
                 Toast.show('Une erreur est survenue. Veuillez réessayer ou m\'écrire directement par email.', 'error');
             } finally {
-                btn.disabled = false;
+                btn.disabled  = false;
                 btn.innerHTML = originalText;
             }
-        }
+        },
     };
 
     // ========================================================
     // Bouton retour en haut
     // ========================================================
     const BackToTop = {
-        init() {
+        cacheDom() {
             this.btn = document.getElementById('back-to-top');
+        },
+
+        init() {
+            this.cacheDom();
             if (!this.btn) return;
             this.bindEvents();
         },
 
         bindEvents() {
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 400) {
-                    this.btn.classList.add('visible');
-                } else {
-                    this.btn.classList.remove('visible');
-                }
+                this.btn.classList.toggle('visible', window.scrollY > 400);
             }, { passive: true });
 
             this.btn.addEventListener('click', () => {
                 window.scrollTo({
                     top: 0,
-                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+                    behavior: media.reducedMotion.matches ? 'auto' : 'smooth',
                 });
             });
-        }
+        },
     };
 
     // ========================================================
@@ -321,14 +339,18 @@
         current: 0,
         charIndex: 0,
         deleting: false,
-        SPEED_TYPE: 80,
+        SPEED_TYPE:   80,
         SPEED_DELETE: 45,
-        PAUSE_END: 2000,
-        PAUSE_START: 400,
+        PAUSE_END:    2000,
+        PAUSE_START:  400,
+
+        cacheDom() {
+            this.el = document.getElementById('typewriter-text');
+        },
 
         init() {
-            this.el = document.getElementById('typewriter-text');
-            if (!this.el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            this.cacheDom();
+            if (!this.el || media.reducedMotion.matches) return;
             this.tick();
         },
 
@@ -350,43 +372,49 @@
                 this.deleting = true;
             } else if (this.deleting && this.charIndex === 0) {
                 this.deleting = false;
-                this.current = (this.current + 1) % this.phrases.length;
-                delay = this.PAUSE_START;
+                this.current  = (this.current + 1) % this.phrases.length;
+                delay         = this.PAUSE_START;
             }
 
             setTimeout(() => this.tick(), delay);
-        }
+        },
     };
 
     // ========================================================
-    // Smooth scroll pour les ancres
+    // Smooth scroll pour les ancres (event delegation — Refactor #4)
+    // Un seul listener sur document au lieu d'un listener par lien
     // ========================================================
     const SmoothScroll = {
         init() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', (e) => {
-                    const targetId = anchor.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({
-                            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-                        });
-                        
-                        // Mise à jour de l'URL sans scroll
-                        history.pushState(null, null, targetId);
-                    }
-                });
+            document.addEventListener('click', (e) => {
+                const anchor = e.target.closest('a[href^="#"]');
+                if (!anchor) return;
+
+                const targetId = anchor.getAttribute('href');
+                if (targetId === '#') return;
+
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({
+                        behavior: media.reducedMotion.matches ? 'auto' : 'smooth',
+                    });
+
+                    // Mise à jour de l'URL sans scroll
+                    history.pushState(null, null, targetId);
+                }
             });
-        }
+        },
     };
 
     // ========================================================
     // Initialisation
     // ========================================================
     document.addEventListener('DOMContentLoaded', () => {
+        // Mise à jour de l'année courante (Refactor #1 — suppression du script inline HTML)
+        const yearEl = document.getElementById('current-year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+
         ThemeManager.init();
         MobileNav.init();
         ScrollSpy.init();

@@ -917,11 +917,6 @@ a:focus-visible {
     gap: var(--spacing-lg);
 }
 
-.footer__legal-link {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-}
-
 /* ============================================================
    Animations
    ============================================================ */
