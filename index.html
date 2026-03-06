@@ -1,699 +1,588 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- SEO -->
-    <title>KarDinaL_Solutions | Développeur Web & Services PC à La Réunion</title>
-    <meta name="description" content="Développeur d'applications web Symfony et services informatiques à Saint-Denis, La Réunion. Sites vitrines, applications web, APIs, assemblage et réparation PC pour particuliers.">
-    <meta name="keywords" content="développeur web, Symfony, PHP, La Réunion, Saint-Denis, assemblage PC, réparation ordinateur, site vitrine, application web">
-    <meta name="author" content="GRONDIN Clarel">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://me.kdlsolutions.re/">
-    
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://me.kdlsolutions.re/">
-    <meta property="og:title" content="KarDinaL_Solutions | Développeur Web & Services PC">
-    <meta property="og:description" content="Développeur d'applications web et services informatiques à La Réunion. Sites vitrines, APIs, assemblage et réparation PC.">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:site_name" content="KarDinaL_Solutions">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="KarDinaL_Solutions | Développeur Web & Services PC">
-    <meta name="twitter:description" content="Développeur d'applications web et services informatiques à La Réunion.">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    
-    <!-- Preload fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="assets/css/styles.css">
-    
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "KarDinaL_Solutions",
-        "description": "Développeur d'applications web Symfony et services informatiques à La Réunion",
-        "url": "https://me.kdlsolutions.re",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Saint-Denis",
-            "addressRegion": "La Réunion",
-            "addressCountry": "FR"
-        },
-        "areaServed": {
-            "@type": "Place",
-            "name": "La Réunion"
-        },
-        "priceRange": "Sur devis",
-        "serviceType": ["Développement web", "Assemblage PC", "Réparation informatique"],
-        "sameAs": [
-            "https://github.com/ALFClarel",
-            "https://www.linkedin.com/in/clarel-grondin-336894282/"
-        ]
-    }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarel Grondin — Développeur Web Freelance à La Réunion</title>
+  <meta name="description" content="Développeur web freelance à La Réunion. Applications web sur mesure avec Symfony et PHP. Profil technique polyvalent, approche artisanale." />
+
+  <!-- Anti-flash : applique le thème avant le rendu CSS -->
+  <script>
+    (function(){
+      var k='clarel-theme',s=localStorage.getItem(k);
+      var t=s||(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');
+      if(t==='light')document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-    <!-- Skip Link -->
-    <a href="#main" class="sr-only">Aller au contenu principal</a>
 
-    <!-- Header -->
-    <header class="header" role="banner">
-        <div class="header__inner">
-            <a href="#" class="header__logo" aria-label="KarDinaL_Solutions - Accueil">
-                <!-- Logo placeholder - remplacer par votre logo -->
-                <svg class="header__logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="16 18 22 12 16 6"></polyline>
-                    <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-                <span>KarDinaL_Solutions</span>
-            </a>
-            
-            <nav class="nav" role="navigation" aria-label="Navigation principale">
-                <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Menu de navigation">
-                    <span class="nav__toggle-line"></span>
-                    <span class="nav__toggle-line"></span>
-                    <span class="nav__toggle-line"></span>
-                </button>
-                
-                <ul class="nav__list" id="nav-menu">
-                    <li><a href="#a-propos" class="nav__link">À propos</a></li>
-                    <li><a href="#services-web" class="nav__link">Services Web</a></li>
-                    <li><a href="#services-pc" class="nav__link">Services PC</a></li>
-                    <li><a href="#competences" class="nav__link">Compétences</a></li>
-                    <li><a href="#portfolio" class="nav__link">Portfolio</a></li>
-                    <li><a href="#contact" class="nav__link">Contact</a></li>
-                </ul>
-                
-                <button class="theme-toggle" aria-label="Activer le mode sombre" type="button">
-                    <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </nav>
-        </div>
-    </header>
+  <!-- Sprite SVG — icônes réutilisées plusieurs fois dans la page -->
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <!-- Flèche diagonale (liens projets) -->
+      <symbol id="ico-arrow-ne" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 11L11 1M11 1H4M11 1v7"/>
+      </symbol>
+      <!-- Flèche droite (boutons CTA / formulaire) -->
+      <symbol id="ico-arrow-right" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 7h12M7 1l6 6-6 6"/>
+      </symbol>
+      <!-- Épingle de localisation (hero + contact) -->
+      <symbol id="ico-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a7 7 0 0 1 7 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 0 1 7-7Z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </symbol>
+    </defs>
+  </svg>
 
-    <!-- Main Content -->
-    <main id="main">
-        <!-- Hero Section -->
-        <section class="hero" id="hero">
-            <div class="hero__content">
-                <span class="hero__badge animate-fade-in-up">
-                    <svg class="hero__badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                        <path d="M2 17l10 5 10-5"></path>
-                        <path d="M2 12l10 5 10-5"></path>
-                    </svg>
-                    Freelance à La Réunion
-                </span>
-                
-                <h1 class="hero__title animate-fade-in-up animate-delay-1">
-                    <span id="typewriter-text">Développeur Web</span><span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span><br>
-                    <span class="hero__title-accent">& Services PC</span>
-                </h1>
-                
-                <p class="hero__description animate-fade-in-up animate-delay-2">
-                    Conception d'applications web sur mesure avec Symfony et PHP. 
-                    Assemblage, réparation et maintenance de PC pour particuliers à Saint-Denis.
-                </p>
-                
-                <div class="hero__actions animate-fade-in-up animate-delay-3">
-                    <a href="#contact" class="btn btn--primary">
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        Contact
-                    </a>
-                    <a href="https://github.com/ALFClarel" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        GitHub
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section À propos -->
-        <section class="section" id="a-propos">
-            <div class="container">
-                <div class="about reveal">
-                    <div class="about__avatar-wrap">
-                        <div class="about__avatar">
-                            <span class="about__avatar-initials">CG</span>
-                        </div>
-                    </div>
-                    <div class="about__content">
-                        <div>
-                            <h2 class="about__name">Clarel Grondin</h2>
-                            <p class="about__role">Développeur Web Freelance · Technicien PC</p>
-                        </div>
-                        <p class="about__bio">
-                            Passionné par la technologie depuis toujours, j'apprends j'accompagne particuliers et entreprises dans leurs projets numériques. Formé en BTS Électronique et en pleine formation de Conception et Développement d'Applications, j'apporte une double expertise : la conception d'applications web avec Symfony et PHP, et la maintenance matérielle de PC. Autonome, rigoureux et orienté résultat, j'interviens de la première idée jusqu'au déploiement en production.
-                        </p>
-                        <div class="about__highlights">
-                            <span class="about__highlight">
-                                <svg class="about__highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                                BTS Électronique
-                            </span>
-                            <span class="about__highlight">
-                                <svg class="about__highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                Saint-Denis, La Réunion
-                            </span>
-                            <span class="about__highlight">
-                                <svg class="about__highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                                Symfony · PHP · MySQL
-                            </span>
-                            <span class="about__highlight">
-                                <svg class="about__highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                                Projets Web & IoT
-                            </span>
-                        </div>
-                        <div class="about__actions">
-                            <a href="#contact" class="btn btn--primary">
-                                <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                                Me contacter
-                            </a>
-                            <a href="https://github.com/ALFClarel" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">
-                                <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Web Section -->
-        <section class="section section--alt" id="services-web">
-            <div class="container">
-                <div class="section__header reveal">
-                    <h2 class="section__title">Services Web</h2>
-                    <p class="section__subtitle">
-                        Développement d'applications web professionnelles, de la conception au déploiement.
-                    </p>
-                </div>
-                
-                <div class="services-grid">
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                        <h3 class="service-card__title">Site Vitrine</h3>
-                        <p class="service-card__description">
-                            Sites web modernes et responsive pour présenter votre activité et attirer de nouveaux clients.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                        </svg>
-                        <h3 class="service-card__title">Application Web</h3>
-                        <p class="service-card__description">
-                            Applications métier sur mesure avec Symfony pour automatiser et optimiser vos processus.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-                        </svg>
-                        <h3 class="service-card__title">API</h3>
-                        <p class="service-card__description">
-                            Développement d'APIs RESTful pour connecter vos applications et services.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                        <h3 class="service-card__title">Refonte</h3>
-                        <p class="service-card__description">
-                            Modernisation de sites existants : design, performances, accessibilité et SEO.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                        </svg>
-                        <h3 class="service-card__title">Hébergement</h3>
-                        <p class="service-card__description">
-                            Mise en place et gestion d'hébergement sur serveurs Linux, configuration DNS et SSL.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polyline points="16 18 22 12 16 6"></polyline>
-                            <polyline points="8 6 2 12 8 18"></polyline>
-                        </svg>
-                        <h3 class="service-card__title">Intégration</h3>
-                        <p class="service-card__description">
-                            Intégration de maquettes, SDKs tiers, APIs et connecteurs avec vos outils métier.
-                        </p>
-                    </article>
-                </div>
-                
-                <div class="tech-stack reveal">
-                    <span class="tech-badge">
-                        <svg class="tech-badge__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                        </svg>
-                        Symfony
-                    </span>
-                    <span class="tech-badge">
-                        <svg class="tech-badge__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                        PHP
-                    </span>
-                    <span class="tech-badge">
-                        <svg class="tech-badge__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                        </svg>
-                        MySQL
-                    </span>
-                    <span class="tech-badge">
-                        <svg class="tech-badge__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 18.5L4 16V9l8 4v7.5zm1-8.77L5.5 8 12 4.5 18.5 8 13 11.73z"/>
-                        </svg>
-                        Linux
-                    </span>
-                </div>
-                
-                <p class="section__subtitle reveal" style="margin-top: var(--spacing-xl); text-align: center;">
-                    <strong>Tarification sur devis</strong> — Chaque projet est unique.
-                </p>
-            </div>
-        </section>
-
-        <!-- Services PC Section -->
-        <section class="section" id="services-pc">
-            <div class="container">
-                <div class="section__header reveal">
-                    <h2 class="section__title">Services PC</h2>
-                    <p class="section__subtitle">
-                        Assemblage sur mesure et maintenance informatique pour particuliers.
-                    </p>
-                </div>
-                
-                <div class="services-grid">
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                            <line x1="9" y1="20" x2="9" y2="23"></line>
-                            <line x1="15" y1="20" x2="15" y2="23"></line>
-                            <line x1="20" y1="9" x2="23" y2="9"></line>
-                            <line x1="20" y1="14" x2="23" y2="14"></line>
-                            <line x1="1" y1="9" x2="4" y2="9"></line>
-                            <line x1="1" y1="14" x2="4" y2="14"></line>
-                        </svg>
-                        <h3 class="service-card__title">Assemblage PC</h3>
-                        <p class="service-card__description">
-                            Montage de configurations sur mesure adaptées à vos besoins : gaming, bureautique, création.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
-                        </svg>
-                        <h3 class="service-card__title">Upgrade</h3>
-                        <p class="service-card__description">
-                            Amélioration des performances : RAM, SSD, carte graphique, alimentation.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <h3 class="service-card__title">Diagnostic</h3>
-                        <p class="service-card__description">
-                            Identification des pannes matérielles et logicielles, tests de composants.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                        </svg>
-                        <h3 class="service-card__title">Réparation</h3>
-                        <p class="service-card__description">
-                            Remplacement de composants défectueux, réparation de connexions, récupération de données.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-                        </svg>
-                        <h3 class="service-card__title">Nettoyage</h3>
-                        <p class="service-card__description">
-                            Dépoussiérage complet, changement de pâte thermique, optimisation du refroidissement.
-                        </p>
-                    </article>
-                    
-                    <article class="service-card reveal">
-                        <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                        <h3 class="service-card__title">Réinstallation OS</h3>
-                        <p class="service-card__description">
-                            Installation propre de Windows ou Linux, configuration et mise à jour des pilotes.
-                        </p>
-                    </article>
-                </div>
-                
-                <div class="github-cta reveal">
-                    <p class="github-cta__text">
-                        <strong>Service Pickup disponible</strong> — Récupération de votre PC à domicile sur Saint-Denis et environs.
-                    </p>
-                    <p class="section__subtitle" style="margin-bottom: 0;">
-                        <strong>Tarification sur devis</strong> — Contactez-moi pour un diagnostic gratuit.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Compétences additionnelles -->
-        <section class="section section--alt" id="competences">
-            <div class="container">
-                <div class="section__header reveal">
-                    <h2 class="section__title">Compétences Techniques</h2>
-                    <p class="section__subtitle">
-                        Formation BTS Électronique et expérience en développement d'applications.
-                    </p>
-                </div>
-                
-                <div class="about-grid">
-                    <article class="about-card reveal">
-                        <svg class="about-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                        </svg>
-                        <h3 class="about-card__title">Électronique</h3>
-                        <p class="about-card__text">
-                            Microcontrôleurs, PCB, soudure. Utilisation de KiCAD, LTSpice, Fritzing.
-                        </p>
-                    </article>
-                    
-                    <article class="about-card reveal">
-                        <svg class="about-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-                            <line x1="12" y1="20" x2="12.01" y2="20"></line>
-                        </svg>
-                        <h3 class="about-card__title">RadioFréquences</h3>
-                        <p class="about-card__text">
-                            LoRa 868/433 MHz, GPS, Bluetooth, WiFi. Systèmes IoT et communications sans fil.
-                        </p>
-                    </article>
-                    
-                    <article class="about-card reveal">
-                        <svg class="about-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polyline points="4 17 10 11 4 5"></polyline>
-                            <line x1="12" y1="19" x2="20" y2="19"></line>
-                        </svg>
-                        <h3 class="about-card__title">Ligne de Commande</h3>
-                        <p class="about-card__text">
-                            Linux, PowerShell, Bash. Administration de serveurs et VPS, automatisation.
-                        </p>
-                    </article>
-                
-                </div>
-                
-                <div class="tech-stack reveal" style="margin-top: var(--spacing-2xl);">
-                    <span class="tech-badge">Python</span>
-                    <span class="tech-badge">HTML/CSS</span>
-                    <span class="tech-badge">C/C++ (Arduino)</span>
-                    <span class="tech-badge">Symfony</span>
-                    <span class="tech-badge">Git</span>
-                    <span class="tech-badge">WordPress</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Portfolio Section -->
-        <section class="section" id="portfolio">
-            <div class="container">
-                <div class="section__header reveal">
-                    <h2 class="section__title">Portfolio</h2>
-                    <p class="section__subtitle">
-                        Quelques réalisations récentes.
-                    </p>
-                </div>
-                
-                <div class="portfolio-grid">
-                    <article class="portfolio-card reveal">
-                        <div class="portfolio-card__image">
-                            <svg class="portfolio-card__placeholder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                        </div>
-                        <div class="portfolio-card__content">
-                            <h3 class="portfolio-card__title">Application Communautaire (Marketplace, Forum, Gestion d'évènements</h3>
-                            <p class="portfolio-card__description">
-                                Application web développée avec Symfony pour la gestion d'annonces, messagerie en temps réel, gestion d'évènement communautaire.
-                            </p>
-                            <div class="portfolio-card__tags">
-                                <span class="portfolio-card__tag">Symfony</span>
-                                <span class="portfolio-card__tag">DaisyUi</span>
-                                <span class="portfolio-card__tag">MySQL</span>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="portfolio-card reveal">
-                        <div class="portfolio-card__image">
-                            <svg class="portfolio-card__placeholder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                        </div>
-                        <div class="portfolio-card__content">
-                            <h3 class="portfolio-card__title">Site Vitrine</h3>
-                            <p class="portfolio-card__description">
-                                Site vitrine avec formulaire de contact automatisé pour un réparateur mobile.
-                            </p>
-                            <div class="portfolio-card__tags">
-                                <span class="portfolio-card__tag">Symfony</span>
-                                <span class="portfolio-card__tag">DaisyUi</span>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="portfolio-card reveal">
-                        <div class="portfolio-card__image">
-                            <svg class="portfolio-card__placeholder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                        </div>
-                        <div class="portfolio-card__content">
-                            <h3 class="portfolio-card__title">API RESTful</h3>
-                            <p class="portfolio-card__description">
-                                API de synchronisation de données entre base de données E-Sport et Applications Web.
-                            </p>
-                            <div class="portfolio-card__tags">
-                                <span class="portfolio-card__tag">Symfony</span>
-                                <span class="portfolio-card__tag">BackEnd</span>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                
-                <div class="github-cta reveal">
-                    <p class="github-cta__text">
-                        Retrouvez mes projets et contributions open source sur GitHub.
-                    </p>
-                    <a href="https://github.com/ALFClarel" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        Voir mon GitHub
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="section section--alt contact" id="contact">
-            <div class="container">
-                <div class="section__header reveal">
-                    <h2 class="section__title">Contact</h2>
-                    <p class="section__subtitle">
-                        Un projet en tête ? Discutons-en.
-                    </p>
-                </div>
-                
-                <form class="contact__form reveal" action="#" method="POST">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Nom</label>
-                        <input type="text" id="name" name="name" class="form-input" required autocomplete="name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-input" required autocomplete="email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Sujet</label>
-                        <input type="text" id="subject" name="subject" class="form-input" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea id="message" name="message" class="form-textarea" required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn--primary" style="width: 100%;">
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                        Envoyer
-                    </button>
-                </form>
-                
-                <div class="contact__info reveal">
-                    <div class="contact__info-item">
-                        <svg class="contact__info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <span>Saint-Denis, La Réunion</span>
-                    </div>
-                    <div class="contact__info-item">
-                        <svg class="contact__info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <!-- Remplacer par votre email professionnel -->
-                        <a href="mailto:contact@me.kdlsolutions.re">kardinalalpha@protonmail.com</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="footer__inner">
-            <div class="footer__top">
-                <div class="footer__brand">
-                    <div class="footer__logo">KarDinaL_Solutions</div>
-                    <p class="footer__description">
-                        Développeur d'applications web et services informatiques/électroniques à La Réunion.
-                    </p>
-                </div>
-                
-                <div class="footer__section">
-                    <h3 class="footer__section-title">Navigation</h3>
-                    <ul class="footer__links">
-                        <li><a href="#services-web" class="footer__link">Services Web</a></li>
-                        <li><a href="#services-pc" class="footer__link">Services PC</a></li>
-                        <li><a href="#competences" class="footer__link">Compétences</a></li>
-                        <li><a href="#portfolio" class="footer__link">Portfolio</a></li>
-                        <li><a href="#contact" class="footer__link">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer__section">
-                    <h3 class="footer__section-title">Réseaux</h3>
-                    <div class="footer__social">
-                        <a href="https://github.com/ALFClarel" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="GitHub">
-                            <svg class="footer__social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                        </a>
-                        <a href="https://www.linkedin.com/in/clarel-grondin-336894282/" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="LinkedIn">
-                            <svg class="footer__social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                        <!-- Ajoutez d'autres réseaux ici si nécessaire -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer__bottom">
-                <p class="footer__copyright">
-                    © <span id="current-year">2025</span> KarDinaL_Solutions — GRONDIN Clarel. Tous droits réservés.
-                </p>
-                <div class="footer__legal">
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Bouton retour en haut -->
-    <button class="back-to-top" id="back-to-top" aria-label="Retour en haut de page" type="button">
-        <svg class="back-to-top__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
-
-    <!-- Toast notification -->
-    <div class="toast" id="toast" role="alert" aria-live="polite">
-        <svg class="toast__icon" id="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"></svg>
-        <span class="toast__message" id="toast-message"></span>
+  <header id="header" role="banner">
+    <div class="container">
+      <a href="#" class="nav-logo">Clarel<span>.</span></a>
+      <nav aria-label="Navigation principale">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#about">À propos</a></li>
+          <li><a href="#services-web">Services</a></li>
+          <li><a href="#portfolio">Projets</a></li>
+          <li><a href="#skills">Profil</a></li>
+          <li><a href="#contact" class="nav-cta">Me contacter</a></li>
+        </ul>
+        <!-- Bouton bascule mode clair / sombre (inspiré du projet ZIP) -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Activer le mode clair" type="button">
+          <!-- Soleil — visible en mode sombre (invite à passer en clair) -->
+          <svg class="theme-icon theme-icon--sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Lune — visible en mode clair (invite à passer en sombre) -->
+          <svg class="theme-icon theme-icon--moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
     </div>
+  </header>
 
-    <!-- Scripts -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/main.js"></script>
+  <main id="main">
+
+    <!-- HERO -->
+    <section id="hero" aria-labelledby="hero-title">
+      <div class="hero-grid-bg" aria-hidden="true"></div>
+      <div class="hero-glow"    aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-location" aria-label="Localisation : Saint-Denis, La Réunion">
+            <svg width="12" height="12" aria-hidden="true"><use href="#ico-pin"/></svg>
+            Saint-Denis · La Réunion
+          </div>
+          <h1 class="hero-title" id="hero-title">
+            Je construis des<br />
+            applications web<br />
+            <em>qui fonctionnent vraiment.</em>
+          </h1>
+          <p class="hero-subtitle">
+            Développeur web freelance, je travaille avec des particuliers, associations
+            et petites entreprises qui ont besoin d'une solution concrète — pas d'une
+            vitrine creuse. Symfony, PHP, et une vraie rigueur dans chaque projet.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn-primary">
+              Démarrer un projet
+              <svg width="14" height="14" aria-hidden="true"><use href="#ico-arrow-right"/></svg>
+            </a>
+            <a href="#portfolio" class="btn-ghost">Voir mes projets</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- À PROPOS -->
+    <section id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-left reveal">
+          <span class="label">À propos</span>
+          <h2 id="about-title">Un développeur<br />qui comprend<br />le vrai problème.</h2>
+          <p class="about-text">Je m'appelle <strong>Clarel Grondin</strong>. Je suis développeur web freelance basé à Saint-Denis, La Réunion. Formé en électronique avant de plonger dans le développement d'applications, j'ai un profil un peu atypique : je comprends autant ce qui se passe à l'écran que ce qui se passe derrière les machines.</p>
+          <p class="about-text">Ce qui me distingue, c'est ma méthode : je commence par <strong>écouter</strong>, je pose les bonnes questions, je cherche à comprendre le vrai besoin avant de proposer quoi que ce soit. Je construis proprement, je documente, et je reste disponible après livraison.</p>
+          <p class="about-text">Je ne prends pas de projets en série. Je préfère travailler sur quelques missions sérieuses plutôt que de tout survoler.</p>
+          <div class="about-values">
+            <span class="value-tag">Méthodique</span>
+            <span class="value-tag">Polyvalent</span>
+            <span class="value-tag">Artisanal</span>
+            <span class="value-tag">Orienté solution</span>
+            <span class="value-tag">Disponible localement</span>
+            <span class="value-tag">Transparent</span>
+          </div>
+        </div>
+        <div class="about-right reveal">
+          <div class="about-card">
+            <div class="card-label">Formation</div>
+            <div class="card-value">BTS Électronique · En cours : Conception & Développement d'Applications</div>
+          </div>
+          <div class="about-card">
+            <div class="card-label">Stack principale</div>
+            <div class="card-value">Symfony · PHP · MySQL · Linux · Git</div>
+          </div>
+          <div class="about-card">
+            <div class="card-label">Localisation</div>
+            <div class="card-value">Saint-Denis, La Réunion · Disponible à distance</div>
+          </div>
+          <div class="about-card">
+            <div class="card-label">Ce que je défends</div>
+            <div class="card-value">Du code propre, pas de disparition après la livraison, une communication claire.</div>
+          </div>
+          <div class="about-card">
+            <div class="card-label">GitHub</div>
+            <div class="card-value">
+              <a href="https://github.com/ALFClarel" target="_blank" rel="noopener">github.com/ALFClarel →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SERVICES WEB -->
+    <section id="services-web" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="label">Services web</span>
+          <h2 id="services-title">Ce que je construis</h2>
+          <p>Du site vitrine au projet métier complet. Chaque projet est traité sur mesure, sans raccourcis, de la conception au déploiement.</p>
+        </div>
+        <div class="services-grid">
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="13" rx="2"/>
+                <path d="M3 8h18M8 21h8M12 16v5"/>
+              </svg>
+            </div>
+            <h3>Site Vitrine</h3>
+            <p>Un site qui présente votre activité clairement, charge vite et donne envie de vous contacter. Responsive, accessible, référencé.</p>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/>
+                <path d="M7 7h.01"/>
+              </svg>
+            </div>
+            <h3>Application Métier</h3>
+            <p>Gestion de commandes, intranet, outil interne : j'analyse votre process et je construis l'application qui s'y adapte, pas l'inverse.</p>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8Z"/>
+                <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/>
+              </svg>
+            </div>
+            <h3>API RESTful</h3>
+            <p>Connecter vos outils, exposer vos données, synchroniser vos services. Je conçois et documente des APIs solides et maintenables.</p>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M3 21v-5h5"/>
+              </svg>
+            </div>
+            <h3>Refonte & Migration</h3>
+            <p>Votre site existant est lent, cassé ou illisible ? Je diagnostique, propose un plan et refonds sans repartir de zéro si ce n'est pas nécessaire.</p>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="8" rx="2"/>
+                <rect x="2" y="14" width="20" height="8" rx="2"/>
+                <line x1="6" y1="6" x2="6.01" y2="6"/>
+                <line x1="6" y1="18" x2="6.01" y2="18"/>
+              </svg>
+            </div>
+            <h3>Hébergement & Déploiement</h3>
+            <p>Mise en ligne sur serveur Linux, configuration DNS, HTTPS, sauvegardes automatiques. Vous ne repartez pas sans que ça tourne.</p>
+          </div>
+
+          <div class="service-card reveal">
+            <div class="service-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                <path d="m3.27 6.96 8.73 5.05 8.73-5.05M12 22.08V12"/>
+              </svg>
+            </div>
+            <h3>Intégration</h3>
+            <p>Intégration de maquettes Figma, connexion à des APIs tierces, ajout d'un module à un projet existant. J'interviens aussi en renfort.</p>
+          </div>
+
+        </div>
+        <div class="services-note reveal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>
+          </svg>
+          <p><strong>Tarification sur devis.</strong>&nbsp; Chaque projet est unique. Je préfère une estimation honnête à un prix affiché qui ne correspond à rien. Échangeons d'abord.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio" aria-labelledby="portfolio-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="label">Projets</span>
+          <h2 id="portfolio-title">Ce que j'ai construit</h2>
+          <p>Quelques projets récents. Pour chacun, le contexte, le problème résolu, et comment j'y ai répondu.</p>
+        </div>
+        <div class="projects-list">
+
+          <article class="project-card reveal" aria-labelledby="p1-title">
+            <div class="project-header">
+              <div>
+                <div class="project-meta">
+                  <span class="project-type">Application communautaire</span>
+                  <span class="project-date">2024–2025</span>
+                </div>
+                <h3 class="project-title" id="p1-title">Plateforme communautaire<br />multi-fonctions</h3>
+                <p class="project-tagline">Marketplace, forum, messagerie en temps réel et gestion d'événements — une seule application cohérente.</p>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-block">
+                <h4>Le besoin</h4>
+                <p>Une communauté locale avait besoin d'un espace numérique unique : publier des annonces, organiser des événements, communiquer en temps réel. Aucune solution existante ne couvrait tout.</p>
+              </div>
+              <div class="project-block">
+                <h4>Ce que j'ai fait</h4>
+                <p>Conception et développement complet avec Symfony. Messagerie instantanée, système d'annonces géré, calendrier d'événements, droits utilisateurs distincts.</p>
+              </div>
+              <div class="project-block">
+                <h4>Résultat</h4>
+                <p>Application déployée, utilisée. Architecture évolutive — des modules supplémentaires peuvent être ajoutés sans refonte.</p>
+              </div>
+            </div>
+            <div class="project-footer">
+              <div class="tech-stack">
+                <span class="tech-badge">Symfony</span><span class="tech-badge">PHP</span>
+                <span class="tech-badge">MySQL</span><span class="tech-badge">DaisyUI</span>
+                <span class="tech-badge">WebSocket</span>
+              </div>
+              <a href="https://github.com/ALFClarel" target="_blank" rel="noopener" class="project-link">
+                Voir sur GitHub
+                <svg width="12" height="12" aria-hidden="true"><use href="#ico-arrow-ne"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" aria-labelledby="p2-title">
+            <div class="project-header">
+              <div>
+                <div class="project-meta">
+                  <span class="project-type">Site vitrine</span>
+                  <span class="project-date">2024</span>
+                </div>
+                <h3 class="project-title" id="p2-title">Vitrine + formulaire<br />automatisé</h3>
+                <p class="project-tagline">Site de présentation pour un réparateur mobile, avec prise de contact automatisée et suivi par email.</p>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-block">
+                <h4>Le besoin</h4>
+                <p>Un artisan réparateur n'avait aucune présence web. Les demandes arrivaient par bouche-à-oreille, sans traçabilité ni qualification des demandes.</p>
+              </div>
+              <div class="project-block">
+                <h4>Ce que j'ai fait</h4>
+                <p>Site vitrine sobre avec formulaire de contact intelligent : qualification du type de panne, confirmation automatique par email, stockage des demandes en base.</p>
+              </div>
+              <div class="project-block">
+                <h4>Résultat</h4>
+                <p>Mise en ligne en moins de deux semaines. Les demandes sont mieux qualifiées, le client ne répond plus aux messages "est-ce que vous réparez les téléphones ?".</p>
+              </div>
+            </div>
+            <div class="project-footer">
+              <div class="tech-stack">
+                <span class="tech-badge">Symfony</span><span class="tech-badge">PHP</span>
+                <span class="tech-badge">DaisyUI</span><span class="tech-badge">SMTP</span>
+              </div>
+              <a href="https://github.com/ALFClarel" target="_blank" rel="noopener" class="project-link">
+                Voir sur GitHub
+                <svg width="12" height="12" aria-hidden="true"><use href="#ico-arrow-ne"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="project-card reveal" aria-labelledby="p3-title">
+            <div class="project-header">
+              <div>
+                <div class="project-meta">
+                  <span class="project-type">API / Back-end</span>
+                  <span class="project-date">2024</span>
+                </div>
+                <h3 class="project-title" id="p3-title">API RESTful<br />de synchronisation E-Sport</h3>
+                <p class="project-tagline">Couche d'API pour synchroniser des données entre une base E-Sport et plusieurs applications consommatrices.</p>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-block">
+                <h4>Le besoin</h4>
+                <p>Des données de tournois stockées dans une base centrale devaient être accessibles par différentes interfaces sans duplication ni incohérence.</p>
+              </div>
+              <div class="project-block">
+                <h4>Ce que j'ai fait</h4>
+                <p>Conception et développement d'une API REST documentée avec Symfony, endpoints sécurisés, format JSON normalisé, gestion des erreurs standardisée.</p>
+              </div>
+              <div class="project-block">
+                <h4>Résultat</h4>
+                <p>API stable, documentée, consommée par plusieurs clients. La base de données reste la source de vérité unique.</p>
+              </div>
+            </div>
+            <div class="project-footer">
+              <div class="tech-stack">
+                <span class="tech-badge">Symfony</span><span class="tech-badge">PHP</span>
+                <span class="tech-badge">API REST</span><span class="tech-badge">JSON</span>
+                <span class="tech-badge">MySQL</span>
+              </div>
+              <a href="https://github.com/ALFClarel" target="_blank" rel="noopener" class="project-link">
+                Voir sur GitHub
+                <svg width="12" height="12" aria-hidden="true"><use href="#ico-arrow-ne"/></svg>
+              </a>
+            </div>
+          </article>
+
+        </div>
+        <div class="portfolio-cta reveal">
+          <a href="https://github.com/ALFClarel" target="_blank" rel="noopener" class="btn-ghost">
+            Tous mes projets sur GitHub
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12L12 1M12 1H4.5M12 1v7.5"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- PROFIL TECHNIQUE -->
+    <section id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-left reveal">
+          <span class="label">Profil technique</span>
+          <h2 id="skills-title">Un profil<br />difficile à<br />étiqueter.</h2>
+          <p>Web, systèmes, électronique, IoT. Pas pour me vendre comme expert en tout, mais parce que comprendre les couches basses change la façon de concevoir les couches hautes.</p>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-group reveal">
+            <div class="skill-group-title">Développement Web</div>
+            <div class="skill-items">
+              <span class="skill-item primary">Symfony</span><span class="skill-item primary">PHP</span>
+              <span class="skill-item primary">MySQL</span><span class="skill-item">HTML / CSS</span>
+              <span class="skill-item">JavaScript</span><span class="skill-item">Twig</span>
+            </div>
+          </div>
+          <div class="skill-group reveal">
+            <div class="skill-group-title">Infrastructure & Outils</div>
+            <div class="skill-items">
+              <span class="skill-item primary">Linux</span><span class="skill-item primary">Git</span>
+              <span class="skill-item">Bash</span><span class="skill-item">PowerShell</span>
+              <span class="skill-item">VPS</span><span class="skill-item">DNS / SSL</span>
+            </div>
+          </div>
+          <div class="skill-group reveal">
+            <div class="skill-group-title">Électronique & IoT</div>
+            <div class="skill-items">
+              <span class="skill-item">Arduino / C</span><span class="skill-item">LoRa 868 MHz</span>
+              <span class="skill-item">KiCAD</span><span class="skill-item">Python</span>
+              <span class="skill-item">Fritzing</span>
+            </div>
+          </div>
+          <div class="skill-group reveal">
+            <div class="skill-group-title">Systèmes & CMS</div>
+            <div class="skill-items">
+              <span class="skill-item">WordPress</span><span class="skill-item">LTSpice</span>
+              <span class="skill-item">Assemblage PC</span>
+            </div>
+          </div>
+          <div class="formation-row reveal">
+            <div class="formation-dot"></div>
+            <p>
+              <strong>BTS Électronique</strong> — base hardware, microcontrôleurs, signaux.
+              Actuellement en formation <strong>Conception et Développement d'Applications</strong> — architecture logicielle, cycles de développement, méthodes de projet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SERVICES SECONDAIRES -->
+    <section id="secondary-services" aria-labelledby="secondary-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="label">En complément</span>
+          <h2 id="secondary-title">Quand le problème dépasse l'écran.</h2>
+          <p>Deux activités secondaires qui complètent mon profil, pour les situations où la solution n'est pas purement logicielle.</p>
+        </div>
+        <div class="secondary-grid">
+
+          <div class="secondary-card reveal">
+            <div class="card-head">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <h3>Services PC</h3>
+            </div>
+            <p>Assemblage, réparation et maintenance informatique pour particuliers à Saint-Denis et environs. Service pickup disponible.</p>
+            <ul class="service-list">
+              <li>Assemblage de configurations sur mesure</li>
+              <li>Diagnostic de pannes matérielles et logicielles</li>
+              <li>Upgrade RAM, SSD, GPU</li>
+              <li>Réinstallation propre Windows / Linux</li>
+              <li>Nettoyage et maintenance thermique</li>
+            </ul>
+          </div>
+
+          <div class="secondary-card reveal">
+            <div class="card-head">
+              <div class="card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                  <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <h3>Électronique & IoT</h3>
+            </div>
+            <p>Prototypage de systèmes embarqués, capteurs, communications sans fil. Une compétence qui enrichit ma vision du développement web connecté.</p>
+            <ul class="service-list">
+              <li>Systèmes LoRa, GPS, Bluetooth</li>
+              <li>Microcontrôleurs (Arduino, C)</li>
+              <li>Conception de circuits (KiCAD)</li>
+              <li>Interfaces web ↔ hardware</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-left reveal">
+          <span class="label">Contact</span>
+          <h2 class="contact-title" id="contact-title">Un projet ?<br /><em>Parlons-en.</em></h2>
+          <p class="contact-desc">Pas de formulaire kafkaïen, pas de devis automatique en 24h. Je lis chaque message et je réponds personnellement. Si votre besoin sort de l'ordinaire, c'est encore mieux.</p>
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
+              <a href="/cdn-cgi/l/email-protection#0b606a796f62656a676a677b636a4b7b79647f6465666a626725686466"><span class="__cf_email__" data-cfemail="afc4ceddcbc6c1cec3cec3dfc7ceefdfddc0dbc0c1c2cec6c381ccc0c2">[email&#160;protected]</span></a>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg width="15" height="15" aria-hidden="true"><use href="#ico-pin"/></svg>
+              </div>
+              <span>Saint-Denis, La Réunion · Disponible à distance</span>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+              </div>
+              <a href="https://github.com/ALFClarel" target="_blank" rel="noopener">github.com/ALFClarel</a>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" name="contact" aria-label="Formulaire de contact" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Votre nom</label>
+              <input type="text" id="name" name="name" placeholder="Prénom Nom" autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="vous@exemple.com" autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subject">Type de projet</label>
+            <select id="subject" name="subject">
+              <option value="" disabled selected>Choisissez un type</option>
+              <option value="vitrine">Site vitrine</option>
+              <option value="app">Application web</option>
+              <option value="api">API / Back-end</option>
+              <option value="refonte">Refonte d'un existant</option>
+              <option value="pc">Service PC</option>
+              <option value="autre">Autre / Je ne sais pas encore</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Décrivez votre besoin</label>
+            <textarea id="message" name="message" placeholder="Contexte, problème à résoudre, contraintes éventuelles… Soyez précis, c'est ce qui me permettra de vous répondre utilement."></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn-primary">
+              Envoyer le message
+              <svg width="14" height="14" aria-hidden="true"><use href="#ico-arrow-right"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">Clarel<span>.</span> — KarDinaL Solutions</div>
+      <span class="footer-copy">© 2025 GRONDIN Clarel · La Réunion</span>
+      <nav class="footer-links" aria-label="Liens footer">
+        <a href="#services-web">Services</a>
+        <a href="#portfolio">Projets</a>
+        <a href="https://github.com/ALFClarel" target="_blank" rel="noopener">GitHub</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Script Cloudflare : décodage email (ne pas modifier) -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
