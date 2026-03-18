@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clarel Grondin — Développeur Web Freelance à La Réunion</title>
+  <title>Clarel Grondin — KarDinaL Solutions · Développeur Web Freelance à La Réunion</title>
   <meta name="description" content="Développeur web freelance à La Réunion. Applications web sur mesure avec Symfony et PHP. Profil technique polyvalent, approche artisanale." />
 
   <!-- Anti-flash : applique le thème avant le rendu CSS -->
@@ -43,7 +43,26 @@
 
   <header id="header" role="banner">
     <div class="container">
-      <a href="#" class="nav-logo">Clarel<span>.</span></a>
+      <a href="#" class="nav-logo" aria-label="KarDinaL Solutions — Accueil">
+        <!-- Symbole Apex K — dark mode -->
+        <svg class="kdl-symbol-dark" width="24" height="28" viewBox="0 0 44 52" fill="none" aria-hidden="true">
+          <line x1="10" y1="6"  x2="10" y2="44" stroke="#FDFAF5" stroke-width="3.5" stroke-linecap="butt"/>
+          <line x1="10" y1="25" x2="27" y2="44" stroke="#FDFAF5" stroke-width="3"   stroke-linecap="butt"/>
+          <line x1="10" y1="25" x2="23" y2="12" stroke="#FDFAF5" stroke-width="3"   stroke-linecap="butt"/>
+          <path d="M 23,7 L 27,11 L 23,15 L 19,11 Z" fill="#A04040"/>
+        </svg>
+        <!-- Symbole Apex K — light mode -->
+        <svg class="kdl-symbol-light" width="24" height="28" viewBox="0 0 44 52" fill="none" aria-hidden="true">
+          <line x1="10" y1="6"  x2="10" y2="44" stroke="#1A1814" stroke-width="3.5" stroke-linecap="butt"/>
+          <line x1="10" y1="25" x2="27" y2="44" stroke="#1A1814" stroke-width="3"   stroke-linecap="butt"/>
+          <line x1="10" y1="25" x2="23" y2="12" stroke="#1A1814" stroke-width="3"   stroke-linecap="butt"/>
+          <path d="M 23,7 L 27,11 L 23,15 L 19,11 Z" fill="#8B3535"/>
+        </svg>
+        <span class="kdl-wordmark">
+          <span class="kdl-wordmark-name">KarDinaL</span>
+          <span class="kdl-wordmark-sub">Solutions</span>
+        </span>
+      </a>
       <nav aria-label="Navigation principale">
         <ul class="nav-links" id="nav-links">
           <li><a href="#about">À propos</a></li>
@@ -373,6 +392,48 @@
             </div>
           </article>
 
+          <article class="project-card project-card--drive reveal" aria-labelledby="pdrive-title">
+            <div class="project-header">
+              <div>
+                <div class="project-meta">
+                  <span class="project-type">Expérience interactive</span>
+                  <span class="project-date">2025</span>
+                </div>
+                <h3 class="project-title" id="pdrive-title">Drive —<br />Mini open world 3D</h3>
+                <p class="project-tagline">Conduisez une Honda Civic EK dans une ville de nuit générée procéduralement. Un terrain de jeu technique : rendu 3D temps réel, physique voiture, minimap et contrôles mobiles.</p>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-block">
+                <h4>L'idée</h4>
+                <p>Explorer les capacités de rendu 3D dans le navigateur sans moteur tiers — uniquement Three.js, du code géométrique et une physique de voiture artisanale.</p>
+              </div>
+              <div class="project-block">
+                <h4>Ce que j'ai construit</h4>
+                <p>Génération procédurale de la ville, système de collision par AABB, caméra follow lissée, minimap précalculée et compatibilité tactile complète.</p>
+              </div>
+              <div class="project-block">
+                <h4>Particularité</h4>
+                <p>100 % statique, zéro dépendance serveur. Tourne directement dans le navigateur, déployé sur GitHub Pages sans backend.</p>
+              </div>
+            </div>
+            <div class="project-footer">
+              <div class="tech-stack">
+                <span class="tech-badge">Three.js</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">WebGL</span>
+                <span class="tech-badge">Canvas 2D</span>
+                <span class="tech-badge">GitHub Pages</span>
+              </div>
+              <a href="drive/index.html" class="drive-cta" aria-label="Lancer le mini-jeu Drive">
+                Jouer
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+
         </div>
         <div class="portfolio-cta reveal">
           <a href="https://github.com/ALFClarel" target="_blank" rel="noopener" class="btn-ghost">
@@ -570,11 +631,29 @@
 
   <footer role="contentinfo">
     <div class="container">
-      <div class="footer-brand">Clarel<span>.</span> — KarDinaL Solutions</div>
+      <div class="footer-brand">
+        <a href="#" style="display:inline-flex;align-items:center;gap:9px;color:inherit;text-decoration:none;" aria-label="KarDinaL Solutions">
+          <svg class="kdl-symbol-dark" width="20" height="24" viewBox="0 0 44 52" fill="none" aria-hidden="true">
+            <line x1="10" y1="6"  x2="10" y2="44" stroke="#d0c7bc" stroke-width="3.5" stroke-linecap="butt"/>
+            <line x1="10" y1="25" x2="27" y2="44" stroke="#d0c7bc" stroke-width="3"   stroke-linecap="butt"/>
+            <line x1="10" y1="25" x2="23" y2="12" stroke="#d0c7bc" stroke-width="3"   stroke-linecap="butt"/>
+            <path d="M 23,7 L 27,11 L 23,15 L 19,11 Z" fill="#A04040"/>
+          </svg>
+          <svg class="kdl-symbol-light" width="20" height="24" viewBox="0 0 44 52" fill="none" aria-hidden="true">
+            <line x1="10" y1="6"  x2="10" y2="44" stroke="#6a5849" stroke-width="3.5" stroke-linecap="butt"/>
+            <line x1="10" y1="25" x2="27" y2="44" stroke="#6a5849" stroke-width="3"   stroke-linecap="butt"/>
+            <line x1="10" y1="25" x2="23" y2="12" stroke="#6a5849" stroke-width="3"   stroke-linecap="butt"/>
+            <path d="M 23,7 L 27,11 L 23,15 L 19,11 Z" fill="#8B3535"/>
+          </svg>
+          <span style="font-family:var(--font-display);font-size:16px;font-weight:400;letter-spacing:0.03em;">KarDinaL</span>
+          <span style="font-size:9px;font-family:var(--font-body);color:var(--text-3);opacity:0.60;letter-spacing:0.22em;text-transform:uppercase;">Solutions</span>
+        </a>
+      </div>
       <span class="footer-copy">© 2025 GRONDIN Clarel · La Réunion</span>
       <nav class="footer-links" aria-label="Liens footer">
         <a href="#services-web">Services</a>
         <a href="#portfolio">Projets</a>
+        <a href="drive/index.html">Drive</a>
         <a href="https://github.com/ALFClarel" target="_blank" rel="noopener">GitHub</a>
         <a href="#contact">Contact</a>
       </nav>

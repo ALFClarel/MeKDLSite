@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KarDinaL Solutions — Symbole Apex K
+  Variante : Colorée — mode clair
+  Fond : transparent
+  viewBox : 44 × 52
+  Usage : site web, signature mail, documents
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 44 52"
+  fill="none"
+  aria-label="KarDinaL Solutions"
+  role="img"
+>
+  <!-- Tige verticale du K — noir profond -->
+  <line
+    x1="10" y1="6"
+    x2="10" y2="44"
+    stroke="#1A1814"
+    stroke-width="3.5"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras inférieur du K — noir profond -->
+  <line
+    x1="10" y1="25"
+    x2="27" y2="44"
+    stroke="#1A1814"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras supérieur du K, montant vers la huppe — noir profond -->
+  <line
+    x1="10" y1="25"
+    x2="23" y2="12"
+    stroke="#1A1814"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Huppe cardinal — losange rouge désaturé, accent signature -->
+  <!-- Évoque la huppe de l'oiseau cardinal, de façon abstraite et précise -->
+  <path
+    d="M 23,7 L 27,11 L 23,15 L 19,11 Z"
+    fill="#8B3535"
+  />
+</svg>

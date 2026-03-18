@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KarDinaL Solutions — Logo horizontal complet
+  Variante : Mode clair
+  Fond : transparent
+  Dimensions : 280 × 52
+  Police : Cormorant Garamond (600) + Jost (200)
+  Note : Convertir les <text> en tracés dans Inkscape/Illustrator
+         avant toute utilisation print ou export PNG définitif.
+         Les polices doivent être installées localement ou chargées via @font-face.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 280 52"
+  fill="none"
+  aria-label="KarDinaL Solutions"
+  role="img"
+>
+  <defs>
+    <style>
+      .kdl-name-text {
+        font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+        font-weight: 600;
+        font-size: 26px;
+        letter-spacing: 0.05em;
+        fill: #1A1814;
+      }
+      .kdl-sub-text {
+        font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+        font-weight: 200;
+        font-size: 8px;
+        letter-spacing: 0.32em;
+        fill: #1A1814;
+        opacity: 0.55;
+      }
+    </style>
+  </defs>
+
+  <!-- ── Symbole Apex K ───────────────────────────── -->
+
+  <!-- Tige verticale -->
+  <line x1="10" y1="6" x2="10" y2="44"
+        stroke="#1A1814" stroke-width="3.5" stroke-linecap="butt"/>
+
+  <!-- Bras inférieur -->
+  <line x1="10" y1="25" x2="27" y2="44"
+        stroke="#1A1814" stroke-width="3" stroke-linecap="butt"/>
+
+  <!-- Bras supérieur -->
+  <line x1="10" y1="25" x2="23" y2="12"
+        stroke="#1A1814" stroke-width="3" stroke-linecap="butt"/>
+
+  <!-- Huppe cardinal -->
+  <path d="M 23,7 L 27,11 L 23,15 L 19,11 Z" fill="#8B3535"/>
+
+  <!-- ── Séparateur vertical ───────────────────────── -->
+  <line x1="52" y1="14" x2="52" y2="38"
+        stroke="#1A1814" stroke-width="0.75" opacity="0.18"/>
+
+  <!-- ── Logotype ──────────────────────────────────── -->
+
+  <!-- "KarDinaL" — Cormorant Garamond SemiBold -->
+  <text class="kdl-name-text" x="68" y="33">KarDinaL</text>
+
+  <!-- "Solutions" — Jost ExtraLight, tracké, secondaire -->
+  <text class="kdl-sub-text" x="69" y="44">Solutions</text>
+
+</svg>

@@ -6,17 +6,17 @@
 
 /* === Variables ================================================ */
 :root {
-  --bg:           #0b0c0e;
-  --surface:      #111214;
-  --surface-2:    #18191c;
-  --border:       rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.14);
-  --text:         #eae7e1;
-  --text-2:       #9a9793;
-  --text-3:       #5c5a57;
-  --accent:       #c8a86b;
-  --accent-dim:   rgba(200,168,107,0.10);
-  --header-bg:    rgba(11,12,14,0.88);
+  --bg:           #241f1a;   /* coffee sombre mais plus clair */
+  --surface:      #2d2722;
+  --surface-2:    #38312b;
+  --border:       rgba(214, 226, 201, 0.12);
+  --border-hover: rgba(214, 226, 201, 0.22);
+  --text:         #f4f1eb;
+  --text-2:       #d0c7bc;
+  --text-3:       #9d9184;
+  --accent:       #b7c9a8;   /* green tea */
+  --accent-dim:   rgba(183, 201, 168, 0.14);
+  --header-bg:    rgba(36, 31, 26, 0.88);
   --font-display: 'Fraunces', Georgia, serif;
   --font-body:    'Figtree', system-ui, sans-serif;
   --radius-sm: 6px;
@@ -26,17 +26,17 @@
 }
 
 [data-theme="light"] {
-  --bg:           #f8f7f4;
-  --surface:      #f1efeb;
-  --surface-2:    #e9e6e1;
-  --border:       rgba(0,0,0,0.08);
-  --border-hover: rgba(0,0,0,0.16);
-  --text:         #1a1917;
-  --text-2:       #5a5855;
-  --text-3:       #9a9893;
-  --accent:       #a07830;
-  --accent-dim:   rgba(160,120,48,0.10);
-  --header-bg:    rgba(248,247,244,0.92);
+  --bg:           #eef3e7;   /* green tea clair */
+  --surface:      #e3ead9;
+  --surface-2:    #d7dfcc;
+  --border:       rgba(78, 60, 44, 0.12);
+  --border-hover: rgba(78, 60, 44, 0.22);
+  --text:         #3f3126;   /* coffee */
+  --text-2:       #6a5849;
+  --text-3:       #9a8a7b;
+  --accent:       #6f8b5e;   /* green tea plus soutenu */
+  --accent-dim:   rgba(111, 139, 94, 0.12);
+  --header-bg:    rgba(238, 243, 231, 0.92);
 }
 
 /* === Reset ==================================================== */
@@ -343,10 +343,81 @@ strong { color: var(--text); font-weight: 500; }
 .form-group select option { background: var(--surface); }
 .form-submit { display: flex; justify-content: flex-end; }
 
+/* === Logo KarDinaL =========================================== */
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.kdl-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.kdl-wordmark-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+.kdl-wordmark-sub {
+  font-family: var(--font-body);
+  font-size: 8px;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 2px;
+  opacity: 0.65;
+}
+/* Symbole SVG adaptatif selon le thème */
+.kdl-symbol-dark  { display: block; }
+.kdl-symbol-light { display: none;  }
+[data-theme="light"] .kdl-symbol-dark  { display: none;  }
+[data-theme="light"] .kdl-symbol-light { display: block; }
+
+/* === Drive — carte projet spéciale ========================== */
+.project-card--drive {
+  background: var(--surface);
+  border-color: rgba(183, 201, 168, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+.project-card--drive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(183, 201, 168, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.project-card--drive:hover { border-color: rgba(183, 201, 168, 0.32); }
+.project-card--drive .project-type { letter-spacing: 0.12em; }
+
+.drive-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px; font-weight: 600;
+  color: var(--accent);
+  border: 1px solid rgba(183, 201, 168, 0.30);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), border-color var(--transition), gap var(--transition);
+  letter-spacing: 0.02em;
+}
+.drive-cta:hover {
+  background: var(--accent-dim);
+  border-color: rgba(183, 201, 168, 0.50);
+  gap: 12px;
+}
+.drive-cta svg { transition: transform var(--transition); }
+.drive-cta:hover svg { transform: translateX(2px); }
+
 /* === Footer =================================================== */
 footer { padding: 36px 0; border-top: 1px solid var(--border); }
 footer .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-.footer-brand { font-family: var(--font-display); font-size: 15px; color: var(--text-2); }
+.footer-brand { font-family: var(--font-display); font-size: 15px; color: var(--text-2); display: flex; align-items: center; }
 .footer-brand span { color: var(--accent); }
 .footer-copy { font-size: 12.5px; color: var(--text-3); }
 .footer-links { display: flex; gap: 20px; }

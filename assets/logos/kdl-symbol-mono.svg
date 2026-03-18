@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KarDinaL Solutions — Symbole Apex K
+  Variante : Monochrome noir
+  Fond : transparent
+  Usage : documents print, tampons, broderie, gravure, fax, impression N&B
+  Note : Pour la version monochrome claire (sur fond sombre), modifier
+         tous les stroke="#1A1814" et fill="#1A1814" en stroke="#FDFAF5" fill="#FDFAF5"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 44 52"
+  fill="none"
+  aria-label="KarDinaL Solutions"
+  role="img"
+>
+  <!-- Tige verticale du K -->
+  <line
+    x1="10" y1="6"
+    x2="10" y2="44"
+    stroke="#1A1814"
+    stroke-width="3.5"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras inférieur du K -->
+  <line
+    x1="10" y1="25"
+    x2="27" y2="44"
+    stroke="#1A1814"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras supérieur du K -->
+  <line
+    x1="10" y1="25"
+    x2="23" y2="12"
+    stroke="#1A1814"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Huppe — monochrome, même couleur que le reste de la marque -->
+  <path
+    d="M 23,7 L 27,11 L 23,15 L 19,11 Z"
+    fill="#1A1814"
+  />
+</svg>

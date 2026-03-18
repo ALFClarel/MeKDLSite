@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KarDinaL Solutions — Symbole Apex K
+  Variante : Mode sombre
+  Fond : transparent (à placer sur #26231E ou #1C1915)
+  Usage : dark mode site, interface sombre
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 44 52"
+  fill="none"
+  aria-label="KarDinaL Solutions"
+  role="img"
+>
+  <!-- Tige verticale du K — blanc cassé -->
+  <line
+    x1="10" y1="6"
+    x2="10" y2="44"
+    stroke="#FDFAF5"
+    stroke-width="3.5"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras inférieur du K -->
+  <line
+    x1="10" y1="25"
+    x2="27" y2="44"
+    stroke="#FDFAF5"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Bras supérieur du K -->
+  <line
+    x1="10" y1="25"
+    x2="23" y2="12"
+    stroke="#FDFAF5"
+    stroke-width="3"
+    stroke-linecap="butt"
+  />
+
+  <!-- Huppe cardinal — légèrement plus clair pour maintenir le contraste sur fond sombre -->
+  <path
+    d="M 23,7 L 27,11 L 23,15 L 19,11 Z"
+    fill="#A04040"
+  />
+</svg>
