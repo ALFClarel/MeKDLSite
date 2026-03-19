@@ -35,11 +35,9 @@
     #minimap-canvas { display: block; border: 1px solid rgba(183,201,168,0.12); border-radius: 10px; background: rgba(8,10,7,0.90); backdrop-filter: blur(4px); }
     #minimap-label { text-align: center; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(183,201,168,0.40); margin-top: 6px; }
 
-    /* HUD vitesse */
-    #hud { position: absolute; bottom: 28px; right: 22px; text-align: right; line-height: 1; }
-    #speed-value { font-family: 'Fraunces', Georgia, serif; font-size: 56px; font-weight: 300; color: #f4f1eb; letter-spacing: -0.03em; }
-    #speed-unit { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #b7c9a8; margin-top: 3px; }
-    #gear-display { font-family: 'Fraunces', Georgia, serif; font-size: 18px; color: rgba(183,201,168,0.35); margin-top: 6px; }
+    /* HUD jauge canvas */
+    #hud { position: absolute; bottom: 14px; right: 14px; }
+    #speed-gauge { display: block; filter: drop-shadow(0 2px 18px rgba(0,0,0,0.80)); }
 
     /* Hint contrôles */
     #controls-hint { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 400; color: rgba(157,145,132,0.55); letter-spacing: 0.05em; white-space: nowrap; transition: opacity 1.2s ease; }
@@ -97,11 +95,9 @@
     <div id="minimap-label">Carte</div>
   </div>
   <div id="hud">
-    <span id="speed-value">0</span>
-    <span id="speed-unit">km/h</span>
-    <div id="gear-display">D</div>
+    <canvas id="speed-gauge" width="172" height="172"></canvas>
   </div>
-  <div id="controls-hint">ZQSD / ↑↓←→ · conduire &nbsp;·&nbsp; Espace · frein à main</div>
+  <div id="controls-hint">ZQSD / ↑↓←→ · conduire &nbsp;·&nbsp; Espace · frein à main &nbsp;·&nbsp; C · caméra &nbsp;·&nbsp; H · phares</div>
 </div>
 <div id="touch-controls">
   <div class="touch-group">
@@ -131,7 +127,7 @@
     <p class="start-sub">Night city · <span>EK Civic</span> · Open world</p>
     <button id="start-btn" disabled onclick="startGame()">Chargement…</button>
     <div id="load-bar"><div id="load-bar-fill"></div></div>
-    <p class="start-controls">ZQSD / Flèches → Conduire &nbsp;·&nbsp; Espace → Frein à main</p>
+    <p class="start-controls">ZQSD / Flèches → Conduire &nbsp;·&nbsp; Espace → Frein à main &nbsp;·&nbsp; C → Caméra &nbsp;·&nbsp; H → Phares</p>
   </div>
 </div>
 
@@ -145,7 +141,7 @@
 // ─────────────────────────────────────────────────
 const canvas   = document.getElementById('game-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.0));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping         = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.60;
@@ -443,21 +439,462 @@ function buildFacadeMaterials() {
 
 
 // ─────────────────────────────────────────────────
+//  ÉTOILES
+// ─────────────────────────────────────────────────
+function buildStars() {
+  const verts = [];
+  for (let i = 0; i < 2400; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.acos(2 * Math.random() - 1);
+    const r     = 230 + Math.random() * 50;
+    const y     = Math.abs(Math.cos(phi)) * r * 0.55 + 18;
+    verts.push(Math.sin(phi)*Math.cos(theta)*r, y, Math.sin(phi)*Math.sin(theta)*r);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
+    color: 0xffffff, size: 0.40, sizeAttenuation: true, transparent: true, opacity: 0.72,
+  })));
+}
+
+
+// ─────────────────────────────────────────────────
+//  PASSAGES PIÉTONS
+// ─────────────────────────────────────────────────
+function buildCrosswalks() {
+  const mat  = new THREE.MeshStandardMaterial({ color: 0x6a6a66, roughness: 0.78, metalness: 0.01 });
+  const SW   = 0.68, NSTRIPES = 5, GAP = 1.52, SL = ROAD_W * 0.84;
+  const _d   = new THREE.Object3D();
+  const pts  = [];
+  for (const rx of NS_X) for (const rz of EW_Z) {
+    for (let si = 0; si < NSTRIPES; si++) {
+      const off = (si - (NSTRIPES - 1) / 2) * GAP;
+      pts.push({ x: rx + off, z: rz + ROAD_W/2 + SL/2 + 0.9, ry: 0 });
+      pts.push({ x: rx + off, z: rz - ROAD_W/2 - SL/2 - 0.9, ry: 0 });
+      pts.push({ x: rx + ROAD_W/2 + SL/2 + 0.9, z: rz + off, ry: Math.PI/2 });
+      pts.push({ x: rx - ROAD_W/2 - SL/2 - 0.9, z: rz + off, ry: Math.PI/2 });
+    }
+  }
+  const geo = new THREE.PlaneGeometry(SW, SL); geo.rotateX(-Math.PI / 2);
+  const im  = new THREE.InstancedMesh(geo, mat, pts.length);
+  pts.forEach(({ x, z, ry }, i) => {
+    _d.position.set(x, 0.018, z); _d.rotation.y = ry; _d.updateMatrix();
+    im.setMatrixAt(i, _d.matrix);
+  });
+  im.instanceMatrix.needsUpdate = true; scene.add(im);
+}
+
+
+// ─────────────────────────────────────────────────
+//  ARBRES URBAINS
+// ─────────────────────────────────────────────────
+function buildTrees() {
+  const tMat  = new THREE.MeshStandardMaterial({ color: 0x241206, roughness: 0.96 });
+  const lMats = [0x0d2206, 0x0f2a08, 0x0b1c05].map(c =>
+    new THREE.MeshStandardMaterial({ color: c, roughness: 0.90 }));
+  const HALF  = ROAD_W / 2;
+  function placeTree(x, z) {
+    const h = 3.8 + rnd()*2.5, r = 1.1 + rnd()*0.9;
+    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.18, h*0.50, 5), tMat);
+    trunk.position.set(x, h*0.25, z); scene.add(trunk);
+    const leaves = new THREE.Mesh(new THREE.SphereGeometry(r, 6, 5), lMats[rndInt(0,2)]);
+    leaves.position.set(x, h*0.70, z); leaves.scale.y = 0.80+rnd()*0.30; scene.add(leaves);
+  }
+  for (const rx of NS_X) {
+    for (let z = -WORLD_H+10; z < WORLD_H-10; z += 15+rnd()*12) {
+      if (EW_Z.some(rz => Math.abs(z - rz) < HALF + 5)) continue;
+      placeTree(rx + (HALF + 3.4), z + rnd()*4 - 2);
+      placeTree(rx - (HALF + 3.4), z + rnd()*4 - 2);
+    }
+  }
+  for (const rz of EW_Z) {
+    for (let x = -WORLD_H+10; x < WORLD_H-10; x += 15+rnd()*12) {
+      if (NS_X.some(rx => Math.abs(x - rx) < HALF + 5)) continue;
+      placeTree(x + rnd()*4 - 2, rz + (HALF + 3.4));
+      placeTree(x + rnd()*4 - 2, rz - (HALF + 3.4));
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────
+//  SON MOTEUR — Web Audio API
+// ─────────────────────────────────────────────────
+function initSound() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const SR = audioCtx.sampleRate, BL = SR * 2;
+    const buf = audioCtx.createBuffer(1, BL, SR);
+    const d   = buf.getChannelData(0);
+    for (let i = 0; i < BL; i++) d[i] = Math.random() * 2 - 1;
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf; src.loop = true; src.start();
+    engFilter = audioCtx.createBiquadFilter();
+    engFilter.type = 'bandpass'; engFilter.frequency.value = 100; engFilter.Q.value = 1.1;
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 440;
+    engGain = audioCtx.createGain(); engGain.gain.value = 0;
+    src.connect(engFilter); engFilter.connect(lp); lp.connect(engGain);
+    engGain.connect(audioCtx.destination);
+  } catch(e) { console.warn('Audio unavailable:', e); }
+}
+
+function updateSound() {
+  if (!audioCtx || !engFilter || !engGain) return;
+  const spd = Math.abs(car.speed) / car.MAX_SPD;
+  const acc  = key('KeyW','ArrowUp') || touchKeys.up;
+  engFilter.frequency.setTargetAtTime(acc ? 90+spd*380 : 65+spd*190, audioCtx.currentTime, 0.09);
+  engGain.gain.setTargetAtTime(gameRunning ? Math.min(0.22, 0.03+spd*0.19) : 0, audioCtx.currentTime, 0.14);
+}
+
+
+// ─────────────────────────────────────────────────
+//  VOITURES GARÉES — matériaux partagés (1 alloc / mat au lieu de 1 / voiture)
+// ─────────────────────────────────────────────────
+const _pcD  = new THREE.MeshStandardMaterial({ color: 0x080808, roughness: 0.88 });
+const _pcGl = new THREE.MeshStandardMaterial({ color: 0x060e18, roughness: 0.22, metalness: 0.04 });
+const _pcTl = new THREE.MeshStandardMaterial({ color: 0xcc0a00, emissive: new THREE.Color(0x880000), emissiveIntensity: 1.0, roughness: 0.14 });
+const _pcTr = new THREE.MeshStandardMaterial({ color: 0x090909, roughness: 0.95 });
+
+function placeParkedCar(x, z, angleY, color) {
+  const G = new THREE.Group();
+  const mB = new THREE.MeshStandardMaterial({ color, roughness: 0.38, metalness: 0.28 });
+  const mD = _pcD;
+  const mGl= _pcGl;
+  const mTl= _pcTl;
+  const mTr= _pcTr;
+
+  function pb(mat, sx, sy, sz, px, py, pz) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), mat);
+    m.position.set(px, py, pz); G.add(m);
+  }
+  pb(mB,  1.70, 0.44, 4.10,  0, 0.42, 0.00);  // caisse
+  pb(mB,  1.56, 0.34, 1.86,  0, 0.78,-0.10);  // toit cabine
+  pb(mGl, 1.42, 0.28, 0.06,  0, 0.77, 0.70);  // pare-brise
+  pb(mGl, 1.42, 0.24, 0.06,  0, 0.76,-0.94);  // lunette
+  pb(mGl, 0.04, 0.24, 1.60,  0.78, 0.76,-0.10); // vitre G
+  pb(mGl, 0.04, 0.24, 1.60, -0.78, 0.76,-0.10); // vitre D
+  pb(mTl, 0.28, 0.12, 0.06,  0.60, 0.50,-2.06); // feu AR G
+  pb(mTl, 0.28, 0.12, 0.06, -0.60, 0.50,-2.06); // feu AR D
+  pb(mD,  0.32, 0.14, 0.06,  0.58, 0.48, 2.08); // phare AV G
+  pb(mD,  0.32, 0.14, 0.06, -0.58, 0.48, 2.08); // phare AV D
+  pb(mD,  1.60, 0.10, 0.22,  0, 0.11,  2.14);   // pare-choc AV
+  pb(mD,  1.58, 0.10, 0.22,  0, 0.11, -2.14);   // pare-choc AR
+
+  const tirGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.21, 13);
+  for (const [wx, wz] of [[0.88, 1.42],[0.88,-1.42],[-0.88, 1.42],[-0.88,-1.42]]) {
+    const wh = new THREE.Mesh(tirGeo, mTr);
+    wh.rotation.z = Math.PI / 2; wh.position.set(wx, 0.24, wz); G.add(wh);
+  }
+
+  G.position.set(x, 0, z); G.rotation.y = angleY; scene.add(G);
+}
+
+function buildParkedCars() {
+  const colors = [
+    // Neutres urbains classiques
+    0x1a2236, 0x252520, 0x2a1515, 0x161528, 0x1b2214,
+    0x1e1e18, 0x181818, 0x0f1a10, 0x201520,
+    // Teintes sobres mais variées
+    0x0e2840, // bleu ardoise profond
+    0x1c3220, // vert forêt nocturne
+    0x2e1010, // bordeaux sang de bœuf
+    0x0a1c2e, // bleu marine
+    0x241e0c, // kaki doré
+    0x16082a, // violet nuit
+    0x281808, // brun rouille urbain
+    0x0e1e16, // vert sauge sombre
+    0x1e2428, // gris acier bleuté
+    0x2c1a0c, // orange brûlé nuit
+    0x0c1808, // vert olive profond
+    0x282030, // lilas fumé
+  ];
+  const HALF = ROAD_W / 2;
+  const zSegs = getAxisSegments(EW_Z, HALF, WORLD_H);
+  const xSegs = getAxisSegments(NS_X, HALF, WORLD_H);
+
+  for (const rx of NS_X) {
+    for (const [z0, z1] of zSegs) {
+      for (let z = z0 + 5; z + 5.5 < z1; z += 5.6 + rnd() * 3.4) {
+        if (rnd() > 0.62) continue;
+        const side = rnd() > 0.5 ? 1 : -1;
+        placeParkedCar(rx + side * (HALF + 2.2), z + rnd() * 1.5, Math.PI / 2, colors[rndInt(0, colors.length-1)]);
+      }
+    }
+  }
+  for (const rz of EW_Z) {
+    for (const [x0, x1] of xSegs) {
+      for (let x = x0 + 5; x + 5.5 < x1; x += 5.6 + rnd() * 3.4) {
+        if (rnd() > 0.62) continue;
+        const side = rnd() > 0.5 ? 1 : -1;
+        placeParkedCar(x + rnd() * 1.5, rz + side * (HALF + 2.2), 0, colors[rndInt(0, colors.length-1)]);
+      }
+    }
+  }
+}
+
+
+// ─────────────────────────────────────────────────
+//  FEUX TRICOLORES
+// ─────────────────────────────────────────────────
+function buildTrafficLights() {
+  const poleMat = new THREE.MeshStandardMaterial({ color: 0x191920, roughness: 0.55, metalness: 0.60 });
+  const housMat = new THREE.MeshStandardMaterial({ color: 0x0c0c10, roughness: 0.88 });
+  const HALF = ROAD_W / 2;
+
+  for (const rx of NS_X) for (const rz of EW_Z) {
+    for (const [ox, oz] of [[1,1],[-1,-1]]) {
+      const px = rx + ox * (HALF + 1.2);
+      const pz = rz + oz * (HALF + 1.2);
+      const G  = new THREE.Group();
+
+      // Poteau
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.10, 5.8, 6), poleMat);
+      pole.position.set(0, 2.9, 0); G.add(pole);
+      // Boîtier
+      const hou = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.92, 0.32), housMat);
+      hou.position.set(0, 5.74, 0); G.add(hou);
+
+      // Lentilles
+      const makeLight = (col, emCol, y) => {
+        const mat = new THREE.MeshStandardMaterial({
+          color: col, emissive: new THREE.Color(emCol), emissiveIntensity: 0.22, roughness: 0.18,
+        });
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.092, 8, 8), mat);
+        m.position.set(0, y, 0.15); G.add(m);
+        return mat;
+      };
+      const mR = makeLight(0x440000, 0x220000, 6.02);
+      const mY = makeLight(0x442200, 0x221100, 5.74);
+      const mG = makeLight(0x004400, 0x002200, 5.46);
+      G.position.set(px, 0, pz); scene.add(G);
+
+      // Phase décalée par intersection pour variété
+      const phaseOff = (Math.abs(rx) + Math.abs(rz)) * 0.07 + (ox > 0 ? 0 : 4.5);
+      trafficLights.push({ mR, mY, mG, phase: 'red', timer: phaseOff % 10, prevPhase: null });
+    }
+  }
+}
+
+function updateTrafficLights(dt) {
+  for (const tl of trafficLights) {
+    tl.timer -= dt;
+    if (tl.timer <= 0) {
+      if      (tl.phase === 'red')    { tl.phase = 'green';  tl.timer = 5.5 + Math.random() * 2; }
+      else if (tl.phase === 'green')  { tl.phase = 'yellow'; tl.timer = 1.1; }
+      else                            { tl.phase = 'red';    tl.timer = 5.0 + Math.random() * 2; }
+    }
+    if (tl.phase === tl.prevPhase) continue; // matériaux déjà à jour
+    tl.prevPhase = tl.phase;
+    const R = tl.phase === 'red', Y = tl.phase === 'yellow', G = tl.phase === 'green';
+    tl.mR.color.setHex(R ? 0xff2200 : 0x1a0000); tl.mR.emissive.setHex(R ? 0xff0000 : 0x110000); tl.mR.emissiveIntensity = R ? 4.2 : 0.10;
+    tl.mY.color.setHex(Y ? 0xffaa00 : 0x1a0800); tl.mY.emissive.setHex(Y ? 0xffa500 : 0x110500); tl.mY.emissiveIntensity = Y ? 3.8 : 0.10;
+    tl.mG.color.setHex(G ? 0x00ee44 : 0x001a0a); tl.mG.emissive.setHex(G ? 0x00ff44 : 0x001108); tl.mG.emissiveIntensity = G ? 4.0 : 0.10;
+  }
+}
+
+
+// ─────────────────────────────────────────────────
+//  PARTICULES ÉCHAPPEMENT
+// ─────────────────────────────────────────────────
+function initExhaust() {
+  for (let i = 0; i < EXHAUST_N; i++) {
+    exhaustData.push({ pos: new THREE.Vector3(9999,9999,9999), vel: new THREE.Vector3(), life: 0, maxLife: 1 });
+    exhaustPos[i*3] = 9999; exhaustPos[i*3+1] = 9999; exhaustPos[i*3+2] = 9999;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(exhaustPos, 3));
+  exhaustMesh = new THREE.Points(geo, new THREE.PointsMaterial({
+    color: 0xaaaaaa, size: 0.26, sizeAttenuation: true, transparent: true, opacity: 0.36, depthWrite: false,
+  }));
+  scene.add(exhaustMesh);
+}
+
+let exhaustEmitIdx = 0;
+function spawnExhaustParticle() {
+  const p = exhaustData[exhaustEmitIdx % EXHAUST_N];
+  exhaustEmitIdx++;
+  const ex = -Math.sin(car.angle) * 0.33;
+  const ez = -Math.cos(car.angle) * 0.33;
+  p.pos.set(car.pos.x + ex - Math.sin(car.angle)*2.27, 0.13, car.pos.z + ez - Math.cos(car.angle)*2.27);
+  const bx2 = -Math.sin(car.angle), bz2 = -Math.cos(car.angle);
+  const spd = Math.abs(car.speed) * 0.35;
+  p.vel.set(bx2*spd+(Math.random()-.5)*0.14, 0.28+Math.random()*0.26, bz2*spd+(Math.random()-.5)*0.14);
+  p.maxLife = 0.55 + Math.random() * 0.65;
+  p.life = p.maxLife;
+}
+
+function updateExhaust(dt) {
+  if (!exhaustMesh) return;
+  const accel = key('KeyW','ArrowUp') || touchKeys.up;
+  if (accel && car.speed > 1.0 && Math.random() < 0.55) spawnExhaustParticle();
+  if (Math.random() < 0.06 && car.speed > 0.2) spawnExhaustParticle(); // idle wisp
+
+  for (let i = 0; i < EXHAUST_N; i++) {
+    const p = exhaustData[i];
+    if (p.life > 0) {
+      p.life -= dt;
+      p.pos.addScaledVector(p.vel, dt);
+      p.vel.y += 0.10 * dt;
+      exhaustPos[i*3]   = p.pos.x;
+      exhaustPos[i*3+1] = p.pos.y;
+      exhaustPos[i*3+2] = p.pos.z;
+    } else {
+      exhaustPos[i*3] = exhaustPos[i*3+1] = exhaustPos[i*3+2] = 9999;
+    }
+  }
+  exhaustMesh.geometry.attributes.position.needsUpdate = true;
+}
+
+
+// ─────────────────────────────────────────────────
+//  MARQUES DE DÉRAPAGE
+// ─────────────────────────────────────────────────
+function initSkidPool() {
+  const geo = new THREE.PlaneGeometry(0.96, 0.18); geo.rotateX(-Math.PI / 2);
+  const mat = new THREE.MeshStandardMaterial({ color: 0x040406, roughness: 0.98, transparent: true, opacity: 0.55, depthWrite: false });
+  for (let i = 0; i < SKID_MAX; i++) {
+    const m = new THREE.Mesh(geo, mat.clone());
+    m.position.y = 0.022; m.visible = false;
+    scene.add(m); skidPool.push({ mesh: m, life: 0, mat: m.material });
+  }
+}
+
+let skidEmitAcc = 0;
+function updateSkids(dt) {
+  const handbrake = key('Space');
+  // Emit marks when handbraking or hard cornering fast
+  if ((handbrake || (Math.abs(car.steer) > 0.35 && Math.abs(car.speed) > 8)) && Math.abs(car.speed) > 2) {
+    skidEmitAcc += dt;
+    if (skidEmitAcc > 0.06) {
+      skidEmitAcc = 0;
+      const s = skidPool[skidIdx % SKID_MAX]; skidIdx++;
+      s.mesh.position.set(car.pos.x, 0.022, car.pos.z);
+      s.mesh.rotation.y = car.angle; s.mesh.visible = true;
+      s.life = 18; s.mat.opacity = 0.52;
+    }
+  } else { skidEmitAcc = 0; }
+
+  for (const s of skidPool) {
+    if (!s.mesh.visible) continue;
+    s.life -= dt;
+    if (s.life < 3) s.mat.opacity = Math.max(0, s.life / 3 * 0.52);
+    if (s.life <= 0) { s.mesh.visible = false; s.mat.opacity = 0.52; }
+  }
+}
+
+
+// ─────────────────────────────────────────────────
+//  JAUGE VITESSE CANVAS
+// ─────────────────────────────────────────────────
+const gaugeCanvas = document.getElementById('speed-gauge');
+const gaugeCtx    = gaugeCanvas.getContext('2d');
+let _lastKmh = -1, _lastGear = '';
+
+function drawSpeedGauge() {
+  const kmh  = Math.round(Math.abs(car.speed) * 3.6);
+  const gear = car.speed >= -0.05 ? 'D' : 'R';
+  if (kmh === _lastKmh && gear === _lastGear) return;
+  _lastKmh = kmh; _lastGear = gear;
+  const W = 172, H = 172, cx = W / 2, cy = H / 2 - 2;
+  const R = 74;
+  const ANG0 = Math.PI * 0.78, ANG1 = Math.PI * 2.22;
+  const frac = Math.min(kmh / 200, 1);
+
+  gaugeCtx.clearRect(0, 0, W, H);
+
+  // Fond circular
+  gaugeCtx.beginPath(); gaugeCtx.arc(cx, cy, R, 0, Math.PI * 2);
+  gaugeCtx.fillStyle = 'rgba(6,7,10,0.90)'; gaugeCtx.fill();
+  gaugeCtx.strokeStyle = 'rgba(183,201,168,0.09)'; gaugeCtx.lineWidth = 1.4; gaugeCtx.stroke();
+
+  // Track gris
+  gaugeCtx.beginPath(); gaugeCtx.arc(cx, cy, R - 9, ANG0, ANG1);
+  gaugeCtx.strokeStyle = 'rgba(50,55,42,0.72)'; gaugeCtx.lineWidth = 6; gaugeCtx.lineCap = 'round'; gaugeCtx.stroke();
+
+  // Arc couleur (gradient vert→orange→rouge)
+  if (frac > 0.003) {
+    const arcEnd = ANG0 + (ANG1 - ANG0) * frac;
+    const grad = gaugeCtx.createLinearGradient(cx - R, cy, cx + R, cy);
+    grad.addColorStop(0.0,  '#b7c9a8');
+    grad.addColorStop(0.55, '#e89a00');
+    grad.addColorStop(1.0,  '#CC0018');
+    gaugeCtx.beginPath(); gaugeCtx.arc(cx, cy, R - 9, ANG0, arcEnd);
+    gaugeCtx.strokeStyle = grad; gaugeCtx.lineWidth = 6; gaugeCtx.lineCap = 'round'; gaugeCtx.stroke();
+  }
+
+  // Ticks & labels
+  const STEPS = 8;
+  for (let i = 0; i <= STEPS; i++) {
+    const a = ANG0 + (ANG1 - ANG0) * i / STEPS;
+    const major = i % 2 === 0;
+    const r0 = R - 15, r1 = major ? R - 24 : R - 19;
+    gaugeCtx.beginPath();
+    gaugeCtx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
+    gaugeCtx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+    gaugeCtx.strokeStyle = major ? 'rgba(183,201,168,0.52)' : 'rgba(183,201,168,0.24)';
+    gaugeCtx.lineWidth = major ? 1.6 : 1.0; gaugeCtx.lineCap = 'butt'; gaugeCtx.stroke();
+    if (major) {
+      const lr = R - 30;
+      gaugeCtx.fillStyle = 'rgba(183,201,168,0.38)';
+      gaugeCtx.font = '600 8.5px Figtree, system-ui'; gaugeCtx.textAlign = 'center'; gaugeCtx.textBaseline = 'middle';
+      gaugeCtx.fillText((i * 25).toString(), cx + Math.cos(a) * lr, cy + Math.sin(a) * lr);
+    }
+  }
+
+  // Aiguille
+  const needleA = ANG0 + (ANG1 - ANG0) * frac;
+  gaugeCtx.save(); gaugeCtx.translate(cx, cy); gaugeCtx.rotate(needleA);
+  // Ombre aiguille
+  gaugeCtx.beginPath(); gaugeCtx.moveTo(-4, 0); gaugeCtx.lineTo(R - 18, 0);
+  gaugeCtx.strokeStyle = 'rgba(0,0,0,0.5)'; gaugeCtx.lineWidth = 3.5; gaugeCtx.lineCap = 'round';
+  gaugeCtx.shadowColor = 'rgba(0,0,0,0.8)'; gaugeCtx.shadowBlur = 4; gaugeCtx.stroke();
+  gaugeCtx.shadowBlur = 0;
+  // Aiguille rouge
+  gaugeCtx.beginPath(); gaugeCtx.moveTo(-5, 0); gaugeCtx.lineTo(R - 18, 0);
+  gaugeCtx.strokeStyle = '#CC0018'; gaugeCtx.lineWidth = 2.2; gaugeCtx.stroke();
+  gaugeCtx.restore();
+
+  // Centre pivot
+  gaugeCtx.beginPath(); gaugeCtx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+  gaugeCtx.fillStyle = '#CC0018'; gaugeCtx.fill();
+  gaugeCtx.beginPath(); gaugeCtx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+  gaugeCtx.fillStyle = '#f4f1eb'; gaugeCtx.fill();
+
+  // Vitesse (km/h)
+  gaugeCtx.fillStyle = '#f4f1eb';
+  gaugeCtx.font = '300 36px Fraunces, Georgia, serif';
+  gaugeCtx.textAlign = 'center'; gaugeCtx.textBaseline = 'middle';
+  gaugeCtx.fillText(kmh.toString(), cx, cy + 20);
+
+  // KM/H
+  gaugeCtx.fillStyle = 'rgba(183,201,168,0.50)';
+  gaugeCtx.font = '600 8px Figtree, system-ui';
+  gaugeCtx.fillText('KM/H', cx, cy + 36);
+
+  // Gear
+  gaugeCtx.fillStyle = gear === 'R' ? '#CC0018' : 'rgba(183,201,168,0.32)';
+  gaugeCtx.font = '300 15px Fraunces, Georgia, serif';
+  gaugeCtx.fillText(gear, cx, cy - 22);
+}
+
+
+// ─────────────────────────────────────────────────
 //  GÉNÉRATION DE LA VILLE
 // ─────────────────────────────────────────────────
 function buildCity() {
   buildWindowTextures();
   buildFacadeMaterials();
 
-  // Sol asphalte
+  // Sol asphalte mouillé (nuit)
   const gnd = new THREE.Mesh(
     new THREE.PlaneGeometry(620, 620),
-    new THREE.MeshStandardMaterial({ color: 0x080a0f, roughness: 0.95, metalness: 0.05 })
+    new THREE.MeshStandardMaterial({ color: 0x090b11, roughness: 0.12, metalness: 0.72, envMapIntensity: 0.6 })
   );
   gnd.rotation.x = -Math.PI / 2; scene.add(gnd);
 
   // Chaussée N-S
-  const roadMat = new THREE.MeshStandardMaterial({ color: 0x10111a, roughness: 0.86, metalness: 0.06 });
+  const roadMat = new THREE.MeshStandardMaterial({ color: 0x0d0f18, roughness: 0.08, metalness: 0.78 });
   for (const rx of NS_X) {
     const r = new THREE.Mesh(new THREE.PlaneGeometry(ROAD_W, 500), roadMat);
     r.rotation.x = -Math.PI / 2; r.position.set(rx, 0.006, 0); scene.add(r);
@@ -479,6 +916,11 @@ function buildCity() {
   for (const bx of BLOCK_CX) for (const bz of BLOCK_CZ) genBlock(bx, bz);
   buildStreetLights();
   buildNeons();
+  buildCrosswalks();
+  buildTrees();
+  buildParkedCars();
+  buildTrafficLights();
+  buildStars();
 
   // Murs de limite monde
   const wMat = new THREE.MeshStandardMaterial({ color: 0x0b0b10, roughness: 0.97 });
@@ -707,9 +1149,10 @@ function buildStreetLights() {
 
   [poleIM, armIM, capIM, bulbIM].forEach(im => { im.instanceMatrix.needsUpdate = true; scene.add(im); });
 
-  // 12 PointLights seulement (premiers lampadaires)
-  lamps.slice(0, 12).forEach(({ lx, lz }) => {
-    const pl = new THREE.PointLight(0xffcc80, 1.8, 26, 2);
+  // 1 PointLight par carrefour = 25 lumières bien réparties
+  // Chaque carrefour a au moins un vrai éclairage sodium (pool serré, réaliste)
+  lamps.filter((_, i) => i % 4 === 0).forEach(({ lx, lz }) => {
+    const pl = new THREE.PointLight(0xffcc80, 2.4, 20, 2);
     pl.position.set(lx, 8.1, lz); scene.add(pl);
   });
 }
@@ -729,13 +1172,16 @@ function buildNeons() {
     { pos: [-30, 4,   3], color: 0xff7700, sc: 0xee6600 },
     { pos: [ 30, 4,  -3], color: 0x44ff88, sc: 0x33ee77 },
   ];
-  for (const n of neons) {
-    const pl = new THREE.PointLight(n.color, 4.8, 34, 2);
-    pl.position.set(...n.pos); scene.add(pl);
+  neons.forEach((n, idx) => {
+    // PointLight uniquement pour les 4 premiers (4 lumières au lieu de 8)
+    if (idx < 4) {
+      const pl = new THREE.PointLight(n.color, 4.0, 26, 2);
+      pl.position.set(...n.pos); scene.add(pl);
+    }
     const sMat = new THREE.MeshStandardMaterial({ color: n.sc, emissive: new THREE.Color(n.sc), emissiveIntensity: 2.2, roughness: 0.30 });
     const sign = new THREE.Mesh(new THREE.BoxGeometry(3.0 + rnd(), 0.50, 0.14), sMat);
     sign.position.set(n.pos[0], n.pos[1] + 5 + rnd() * 5, n.pos[2] + 5); scene.add(sign);
-  }
+  });
 }
 
 
@@ -747,6 +1193,26 @@ function buildNeons() {
 // ─────────────────────────────────────────────────
 let carGroup, steerFL, steerFR;
 const allWheelGroups = [];
+// ── Références dynamiques ──
+let tlBrakeMat = null, tlGlowLight = null, tlReverseMat = null, tlReverseLight = null;
+const headlightSpots = [];
+let headlightsOn = true;
+let camMode = 0;           // 0=chase · 1=sport low · 2=hood cam
+let audioCtx = null, engFilter = null, engGain = null;
+
+// ── Feux tricolores ──
+const trafficLights = [];
+
+// ── Particules échappement ──
+const EXHAUST_N = 50;
+const exhaustPos = new Float32Array(EXHAUST_N * 3);
+const exhaustData = [];
+let   exhaustMesh = null;
+
+// ── Marques de dérapage ──
+const SKID_MAX = 80;
+const skidPool  = [];
+let   skidIdx   = 0;
 
 function createCar() {
   carGroup = new THREE.Group();
@@ -762,23 +1228,26 @@ function createCar() {
     m.rotation.set(rx, ry, rz); m.position.set(posX, posY, posZ); G.add(m); return m;
   }
 
-  // ── MATÉRIAUX ──
-  const mBody = new THREE.MeshPhysicalMaterial({ color: 0xd4c4a0, metalness: 0.05, roughness: 0.16, clearcoat: 1.0, clearcoatRoughness: 0.05 });
-  const mKit  = new THREE.MeshPhysicalMaterial({ color: 0x0f0f13, roughness: 0.38, metalness: 0.08, clearcoat: 0.45, clearcoatRoughness: 0.40 });
-  const mDark = new THREE.MeshStandardMaterial({ color: 0x0c0c10, roughness: 0.88 });
-  const mGlass= new THREE.MeshPhysicalMaterial({ color: 0x0a1520, transparent: true, opacity: 0.74, roughness: 0.03, clearcoat: 1.0, clearcoatRoughness: 0.0 });
-  const mHL   = new THREE.MeshStandardMaterial({ color: 0xfff8f2, emissive: new THREE.Color(0xfff4e0), emissiveIntensity: 2.5, roughness: 0.03 });
-  const mHLens= new THREE.MeshStandardMaterial({ color: 0x98b8f0, emissive: new THREE.Color(0x7090dd), emissiveIntensity: 0.8, transparent: true, opacity: 0.90, roughness: 0.04 });
-  const mAmb  = new THREE.MeshStandardMaterial({ color: 0xff9900, emissive: new THREE.Color(0xff6600), emissiveIntensity: 1.8, roughness: 0.16 });
-  const mTL   = new THREE.MeshStandardMaterial({ color: 0xff1000, emissive: new THREE.Color(0xff0400), emissiveIntensity: 2.2, roughness: 0.12 });
-  const mTLMid= new THREE.MeshStandardMaterial({ color: 0xbbaa88, emissive: new THREE.Color(0x887755), emissiveIntensity: 0.7, roughness: 0.25 });
-  const mPla  = new THREE.MeshStandardMaterial({ color: 0xd0d0b8, emissive: new THREE.Color(0x555540), emissiveIntensity: 0.65, roughness: 0.50 });
-  const mRim  = new THREE.MeshPhysicalMaterial({ color: 0xe6e8e2, metalness: 0.50, roughness: 0.18, clearcoat: 0.65, clearcoatRoughness: 0.12 });
-  const mTire = new THREE.MeshStandardMaterial({ color: 0x0c0c0e, roughness: 0.92 });
-  const mCal  = new THREE.MeshStandardMaterial({ color: 0xcc0000, emissive: new THREE.Color(0x440000), roughness: 0.45, metalness: 0.44 });
-  const mDisc = new THREE.MeshStandardMaterial({ color: 0x3c3c3c, roughness: 0.56, metalness: 0.75 });
-  const mExh  = new THREE.MeshStandardMaterial({ color: 0x909090, roughness: 0.20, metalness: 0.88 });
-  const mInt  = new THREE.MeshStandardMaterial({ color: 0x5a0c0c, roughness: 0.76, emissive: new THREE.Color(0x120000), emissiveIntensity: 0.25 });
+  // ── MATÉRIAUX — Honda Civic EK Coupe 1997 / Milano Red ──
+  const mBody = new THREE.MeshPhysicalMaterial({ color: 0xCC0018, metalness: 0.08, roughness: 0.11, clearcoat: 1.0, clearcoatRoughness: 0.03 });
+  const mKit  = new THREE.MeshPhysicalMaterial({ color: 0x090909, roughness: 0.42, metalness: 0.10, clearcoat: 0.50, clearcoatRoughness: 0.42 });
+  const mDark = new THREE.MeshStandardMaterial({ color: 0x09090c, roughness: 0.88 });
+  const mGlass= new THREE.MeshPhysicalMaterial({ color: 0x0c1825, transparent: true, opacity: 0.62, roughness: 0.02, clearcoat: 1.0, clearcoatRoughness: 0.0 });
+  const mHL   = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: new THREE.Color(0xfff6e0), emissiveIntensity: 3.5, roughness: 0.02 });
+  const mHLens= new THREE.MeshPhysicalMaterial({ color: 0xe8f0ff, transparent: true, opacity: 0.94, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.0 });
+  const mAmb  = new THREE.MeshStandardMaterial({ color: 0xff8800, emissive: new THREE.Color(0xff5500), emissiveIntensity: 2.4, roughness: 0.14 });
+  const mTL   = new THREE.MeshStandardMaterial({ color: 0xff0a00, emissive: new THREE.Color(0xff0000), emissiveIntensity: 1.2, roughness: 0.10 });
+  const mTLMid= new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: new THREE.Color(0xdddddd), emissiveIntensity: 0.45, roughness: 0.18 });
+  const mPla  = new THREE.MeshStandardMaterial({ color: 0xe8e8d8, emissive: new THREE.Color(0x777766), emissiveIntensity: 0.50, roughness: 0.42 });
+  const mRim  = new THREE.MeshPhysicalMaterial({ color: 0x16160e, metalness: 0.94, roughness: 0.11, clearcoat: 0.88, clearcoatRoughness: 0.05 }); // Gunmetal TE37
+  const mTire = new THREE.MeshStandardMaterial({ color: 0x0c0c0e, roughness: 0.94 });
+  const mCal  = new THREE.MeshStandardMaterial({ color: 0xcc2200, emissive: new THREE.Color(0x550000), roughness: 0.42, metalness: 0.44 });
+  const mDisc = new THREE.MeshStandardMaterial({ color: 0x363636, roughness: 0.50, metalness: 0.80 });
+  const mExh  = new THREE.MeshStandardMaterial({ color: 0x8a8a8a, roughness: 0.16, metalness: 0.92 });
+  const mInt  = new THREE.MeshStandardMaterial({ color: 0x101010, roughness: 0.82, emissive: new THREE.Color(0x080806), emissiveIntensity: 0.18 });
+  const mBadge= new THREE.MeshStandardMaterial({ color: 0xd0d0cc, metalness: 0.94, roughness: 0.08, emissive: new THREE.Color(0x888880), emissiveIntensity: 0.28 });
+  tlBrakeMat  = mTL;   // référence dynamique — intensité pilotée dans updateCar
+  tlReverseMat = mTLMid; // feux de marche arrière
 
   // ═══ CARROSSERIE (EK6 : L≈4.39 · l=1.72 · h≈1.34) ═══
   // Convention : Z+ = avant (phares), Z- = arrière (feux), X+ = droite
@@ -857,11 +1326,9 @@ function createCar() {
   bx(mKit, 0.08, 0.14, 3.05,  W/2+0.02, GC+0.07,  0.00); // jupe G
   bx(mKit, 0.08, 0.14, 3.05, -W/2-0.02, GC+0.07,  0.00); // jupe D
 
-  // ── AILERON ARRIÈRE ──
-  bx(mDark, 1.36, 0.05, 0.10,  0,     GC+0.56, -1.77);
-  bx(mDark, 0.09, 0.30, 0.08,  0.57,  GC+0.70, -1.77);
-  bx(mDark, 0.09, 0.30, 0.08, -0.57,  GC+0.70, -1.77);
-  bx(mDark, 1.44, 0.09, 0.06,  0,     GC+0.86, -1.77);
+  // ── BECQUET COFFRE — trunk lip spoiler (LS stock) ──
+  bx(mBody, W-0.18, 0.07, 0.12,  0, GC+0.57, -2.06);
+  bx(mKit,  W-0.20, 0.03, 0.05,  0, GC+0.61, -2.02);
 
   // ── VITRES ──
   bx(mGlass, W-0.22, 0.52, 0.07,  0, GC+1.01,  0.86); // pare-brise
@@ -877,6 +1344,18 @@ function createCar() {
 
   // ── INTÉRIEUR ──
   bx(mInt, W-0.30, 0.26, 1.40,  0, GC+0.76, -0.05);
+  // Tableau de bord
+  bx(mInt, W-0.30, 0.17, 0.54,  0, GC+0.91, 0.56);
+  // Volant (EK Civic — 3 branches)
+  const mSteer = new THREE.MeshStandardMaterial({ color: 0x080808, roughness: 0.52, metalness: 0.22 });
+  const volant = new THREE.Mesh(new THREE.TorusGeometry(0.172, 0.022, 7, 22), mSteer);
+  volant.position.set(0, GC+0.86, 0.45); volant.rotation.x = Math.PI/2 - 0.36; G.add(volant);
+  bx(mSteer, 0.08, 0.05, 0.07, 0, GC+0.88, 0.44); // moyeu
+  // Levier de vitesse
+  const mShift = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.36, metalness: 0.55 });
+  bx(mDark, 0.044, 0.18, 0.044, 0.18, GC+0.79, -0.09);
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.036, 8, 8), mShift);
+  knob.position.set(0.18, GC+0.88, -0.09); G.add(knob);
 
   // ── RÉTROVISEURS ──
   bx(mBody, 0.14, 0.13, 0.36,  W/2+0.04, GC+1.00, 0.68);
@@ -884,44 +1363,63 @@ function createCar() {
   bx(mDark, 0.04, 0.11, 0.30,  W/2+0.08, GC+1.00, 0.68);
   bx(mDark, 0.04, 0.11, 0.30, -W/2-0.08, GC+1.00, 0.68);
 
-  // ── PHARES AVANT ──
-  bx(mDark,  0.50, 0.26, 0.09,  W/2-0.12, GC+0.60, 2.22);
-  bx(mDark,  0.50, 0.26, 0.09, -W/2+0.12, GC+0.60, 2.22);
-  bx(mHLens, 0.28, 0.17, 0.07,  W/2-0.12, GC+0.62, 2.24);
-  bx(mHLens, 0.28, 0.17, 0.07, -W/2+0.12, GC+0.62, 2.24);
-  bx(mHL,    0.14, 0.10, 0.06,  W/2-0.12, GC+0.63, 2.25);
-  bx(mHL,    0.14, 0.10, 0.06, -W/2+0.12, GC+0.63, 2.25);
-  bx(mAmb,   0.22, 0.14, 0.08,  W/2+0.01, GC+0.54, 2.20);
-  bx(mAmb,   0.22, 0.14, 0.08, -W/2-0.01, GC+0.54, 2.20);
-  bx(mDark,  0.68, 0.17, 0.06,  0,         GC+0.44, 2.23);
-  bx(mDark,  0.35, 0.09, 0.05,  0,         GC+0.23, 2.24);
+  // ── PHARES AVANT — EK Civic (grands boîtiers angulaires clear-lens) ──
+  // Boîtier externe (fond chromé/noir)
+  bx(mDark,  0.62, 0.34, 0.12,  W/2-0.14, GC+0.65, 2.21);
+  bx(mDark,  0.62, 0.34, 0.12, -W/2+0.14, GC+0.65, 2.21);
+  // Lentille polycarbonate clear
+  bx(mHLens, 0.56, 0.28, 0.08,  W/2-0.14, GC+0.66, 2.24);
+  bx(mHLens, 0.56, 0.28, 0.08, -W/2+0.14, GC+0.66, 2.24);
+  // Ampoule H4 (inner reflector glow)
+  bx(mHL,    0.24, 0.15, 0.05,  W/2-0.14, GC+0.67, 2.26);
+  bx(mHL,    0.24, 0.15, 0.05, -W/2+0.14, GC+0.67, 2.26);
+  // Clignotant avant ambre (intégré au boîtier EK)
+  bx(mAmb,   0.16, 0.10, 0.08,  W/2+0.01, GC+0.52, 2.22);
+  bx(mAmb,   0.16, 0.10, 0.08, -W/2-0.01, GC+0.52, 2.22);
+  // Calandre centrale EK (simple barre)
+  bx(mKit,   0.64, 0.18, 0.08,  0, GC+0.42, 2.24);
+  bx(mKit,   0.38, 0.09, 0.06,  0, GC+0.26, 2.25);
+  // Emblème Honda H — avant
+  bx(mBadge, 0.14, 0.10, 0.03,  0, GC+0.44, 2.28);
 
-  // ── FEUX ARRIÈRE ──
-  bx(mTL,    0.60, 0.26, 0.07,  0.56, GC+0.58, -2.19);
-  bx(mTL,    0.60, 0.26, 0.07, -0.56, GC+0.58, -2.19);
-  bx(mTLMid, 0.50, 0.10, 0.06,  0,    GC+0.68, -2.19);
-  bx(mDark,  0.32, 0.24, 0.06,  0,    GC+0.54, -2.19);
-  bx(mPla,   0.34, 0.12, 0.05,  0,    GC+0.43, -2.21);
+  // ── FEUX ARRIÈRE — EK Coupe (boîtiers larges rouge/clear) ──
+  bx(mTL,    0.64, 0.30, 0.08,  0.52, GC+0.63, -2.18);  // feu principal G
+  bx(mTL,    0.64, 0.30, 0.08, -0.52, GC+0.63, -2.18);  // feu principal D
+  bx(mTLMid, 0.26, 0.15, 0.07,  0.52, GC+0.65, -2.21);  // insert réflecteur G
+  bx(mTLMid, 0.26, 0.15, 0.07, -0.52, GC+0.65, -2.21);  // insert réflecteur D
+  bx(mTLMid, 0.26, 0.20, 0.07,  0.00, GC+0.61, -2.20);  // feux de recul centre
+  bx(mDark,  0.30, 0.28, 0.06,  0.00, GC+0.55, -2.19);  // insert central noir
+  bx(mPla,   0.34, 0.12, 0.05,  0,    GC+0.42, -2.21);  // plaque d'immatriculation
+  bx(mBadge, 0.10, 0.08, 0.03,  0,    GC+0.65, -2.22);  // emblème Honda H AR
 
-  const tlGlow = new THREE.PointLight(0xff1800, 2.0, 5.5, 2);
-  tlGlow.position.set(0, GC+0.58, -2.38); G.add(tlGlow);
+  tlGlowLight = new THREE.PointLight(0xff1800, 1.5, 6.5, 2);
+  tlGlowLight.position.set(0, GC+0.62, -2.40); G.add(tlGlowLight);
 
-  // ── ÉCHAPPEMENTS ──
-  const exh1 = new THREE.Mesh(new THREE.CylinderGeometry(0.082, 0.072, 0.28, 10), mExh);
-  exh1.rotation.x = Math.PI/2; exh1.position.set(-0.30, GC+0.16, -2.25); G.add(exh1);
-  const exh2 = new THREE.Mesh(new THREE.CylinderGeometry(0.070, 0.060, 0.22, 10), mExh);
-  exh2.rotation.x = Math.PI/2; exh2.position.set(-0.46, GC+0.16, -2.24); G.add(exh2);
+  // ── Feux de marche arrière (PointLight blanc, intensité 0 au repos) ──
+  tlReverseLight = new THREE.PointLight(0xffffff, 0, 9, 2);
+  tlReverseLight.position.set(0, GC+0.55, -2.60); G.add(tlReverseLight);
+
+  // ── ÉCHAPPEMENT — Sortie N1 double (JDM) ──
+  const mTip = new THREE.MeshStandardMaterial({ color: 0xb8b8b0, roughness: 0.10, metalness: 0.96 });
+  const exh1 = new THREE.Mesh(new THREE.CylinderGeometry(0.096, 0.080, 0.34, 10), mTip);
+  exh1.rotation.x = Math.PI/2; exh1.position.set(-0.25, GC+0.13, -2.27); G.add(exh1);
+  const exh2 = new THREE.Mesh(new THREE.CylinderGeometry(0.086, 0.072, 0.30, 10), mTip);
+  exh2.rotation.x = Math.PI/2; exh2.position.set(-0.41, GC+0.13, -2.27); G.add(exh2);
+  // Bride de sortie
+  const exhFlange = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.04, 7), mExh);
+  exhFlange.rotation.x = Math.PI/2; exhFlange.position.set(-0.33, GC+0.13, -2.14); G.add(exhFlange);
 
   // ── SPOTLIGHTS PHARES ──
   function addSpot(x, y, z) {
-    const sl = new THREE.SpotLight(0xfff4d8, 7.0, 65, Math.PI * 0.13, 0.36, 1.6);
+    const sl = new THREE.SpotLight(0xfff8e8, 8.5, 74, Math.PI * 0.12, 0.26, 1.4);
     sl.position.set(x, y, z);
     const tgt = new THREE.Object3D();
-    tgt.position.set(x * 0.55, y - 0.45, 42);
+    tgt.position.set(x * 0.44, y - 0.52, 48);
     G.add(tgt); sl.target = tgt; G.add(sl);
+    headlightSpots.push(sl);
   }
-  addSpot( W/2-0.12, GC+0.63, 2.24);
-  addSpot(-W/2+0.12, GC+0.63, 2.24);
+  addSpot( W/2-0.14, GC+0.67, 2.26);
+  addSpot(-W/2+0.14, GC+0.67, 2.26);
 
   // ═══ ROUES ═══
   // AXLE_F = Z+1.30 (avant)  AXLE_R = Z-1.32 (arrière)  AXLE_S = X±0.88 (voie)
@@ -996,10 +1494,13 @@ function createCar() {
 // ─────────────────────────────────────────────────
 const car = {
   pos:   new THREE.Vector3(0, 0, -75),
-  angle: 0,      // lacet, 0 = vers +Z
+  angle: 0,
   speed: 0,
   steer: 0,
   wheelRot: 0,
+  roll:  0,          // roulis carrosserie
+  bounce: 0,         // rebond suspension
+  prevAngle: 0,      // pour calcul lacet
   WB:         2.62,
   MAX_SPD:    28,
   MAX_REV:    7,
@@ -1012,7 +1513,14 @@ const car = {
 
 const keys      = {};
 const touchKeys = { up: false, down: false, left: false, right: false };
-window.addEventListener('keydown', e => { keys[e.code] = true; });
+window.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (e.code === 'KeyC') camMode = (camMode + 1) % 3;
+  if (e.code === 'KeyH') {
+    headlightsOn = !headlightsOn;
+    headlightSpots.forEach(s => { s.intensity = headlightsOn ? 8.5 : 0; });
+  }
+});
 window.addEventListener('keyup',   e => { keys[e.code] = false; });
 function key(...codes) { return codes.some(c => keys[c]); }
 
@@ -1045,7 +1553,7 @@ function updateCar(dt) {
   // [FIX-1] steerTarget : left=+1, right=-1 (PHYSIQUE CORRECTE — identique à l'original)
   // La physique (angle -=) est correcte : left→steer+→turnRadius+→angle-=+ → angle décroit → LEFT ✓
   // right→steer-→turnRadius-→angle-=- → angle croît → RIGHT ✓
-  const steerTarget = (turnLeft ? 1 : turnRight ? -1 : 0)
+  const steerTarget = (turnRight ? 1 : turnLeft ? -1 : 0)
     * car.STEER_MAX
     * Math.max(0.18, 1 - Math.abs(car.speed) / car.MAX_SPD * 0.65);
   car.steer += (steerTarget - car.steer) * car.STEER_RATE * dt;
@@ -1072,28 +1580,71 @@ function updateCar(dt) {
   carGroup.position.set(car.pos.x, 0, car.pos.z);
   carGroup.rotation.y = car.angle;
 
+  // ── Feux arrière dynamiques (freinage + marche arrière) ──
+  const isBraking  = (brake || touchKeys.down) && car.speed > 0.15;
+  const isReversing = car.speed < -0.10;
+  if (tlBrakeMat) tlBrakeMat.emissiveIntensity = isBraking ? 5.2 : 1.2;
+  if (tlGlowLight) {
+    tlGlowLight.color.setHex(isReversing ? 0xffffff : 0xff1800);
+    tlGlowLight.intensity = isBraking ? 5.8 : isReversing ? 3.5 : 1.5;
+  }
+  if (tlReverseMat) {
+    tlReverseMat.emissive.setHex(isReversing ? 0xffffff : 0xdddddd);
+    tlReverseMat.emissiveIntensity = isReversing ? 4.5 : 0.45;
+  }
+  if (tlReverseLight) tlReverseLight.intensity = isReversing ? 2.8 : 0;
+
   // [FIX-1] Visuel roues directrices : signe négligé → -car.steer
-  // steer=+1 (left turn) → rotation.y = -1 → roue pointe vers gauche (-X) ✓
-  // steer=-1 (right turn) → rotation.y = +1 → roue pointe vers droite (+X) ✓
   steerFL.rotation.y = -car.steer;
   steerFR.rotation.y = -car.steer;
 
-  // [FIX-2] Rotation des roues sur l'axe X, signe positif = avance vers +Z
-  // Le pneu est aligné sur X (tire.rotation.z=PI/2) → roulement = rotation.x
-  // wg.rotation.x = +wheelRot : rotation en sens trigonométrique autour X = avance ✓
+  // [FIX-2] Rotation des roues
   car.wheelRot += car.speed * dt / 0.27;
   for (const wg of allWheelGroups) wg.rotation.x = car.wheelRot;
+
+  // ── Roulis carrosserie ──
+  const yawRate     = (car.angle - car.prevAngle) / (dt + 1e-9);
+  car.prevAngle     = car.angle;
+  const targetRoll  = -yawRate * Math.abs(car.speed) * 0.028;
+  car.roll += (targetRoll - car.roll) * 5.5 * dt;
+  carGroup.rotation.z = Math.max(-0.065, Math.min(0.065, car.roll));
+
+  // ── Rebond suspension (petite vibration liée à la vitesse) ──
+  const spd = Math.abs(car.speed);
+  car.bounce += dt * 14.0;
+  const bounceMag = Math.min(spd * 0.0018, 0.018);
+  carGroup.position.y = Math.sin(car.bounce) * bounceMag;
+
+  // ── FOV dynamique (sensation de vitesse) ──
+  const targetFov = 58 + spd / car.MAX_SPD * 18;
+  camera.fov += (targetFov - camera.fov) * 3.0 * dt;
+  camera.updateProjectionMatrix();
 }
 
 
 // ─────────────────────────────────────────────────
-//  CAMÉRA FOLLOW
+//  CAMÉRA FOLLOW — 3 modes (C)
 // ─────────────────────────────────────────────────
 function updateCamera(dt) {
   const f = CAM_S * 60 * dt, lf = LOOK_S * 60 * dt;
-  camPos.x  += (car.pos.x - Math.sin(car.angle) * CAM_DIST - camPos.x) * f;
-  camPos.y  += (CAM_H - camPos.y) * f;
-  camPos.z  += (car.pos.z - Math.cos(car.angle) * CAM_DIST - camPos.z) * f;
+
+  if (camMode === 2) {
+    // Vue capot (hood cam)
+    const hx = car.pos.x + Math.sin(car.angle) * 1.9;
+    const hz = car.pos.z + Math.cos(car.angle) * 1.9;
+    camera.position.set(hx, 1.28, hz);
+    camLook.x += (car.pos.x + Math.sin(car.angle) * 15 - camLook.x) * lf * 3.5;
+    camLook.y += (1.05 - camLook.y) * lf * 3.5;
+    camLook.z += (car.pos.z + Math.cos(car.angle) * 15 - camLook.z) * lf * 3.5;
+    camera.lookAt(camLook); return;
+  }
+
+  const dist   = camMode === 1 ? 6.5 : CAM_DIST;
+  const height = camMode === 1 ? 2.3 : CAM_H;
+
+  camPos.x  += (car.pos.x - Math.sin(car.angle) * dist - camPos.x) * f;
+  camPos.y  += (height - camPos.y) * f;
+  camPos.z  += (car.pos.z - Math.cos(car.angle) * dist - camPos.z) * f;
   camLook.x += (car.pos.x + Math.sin(car.angle) * 3.5 - camLook.x) * lf;
   camLook.y += (1.1 - camLook.y) * lf;
   camLook.z += (car.pos.z + Math.cos(car.angle) * 3.5 - camLook.z) * lf;
@@ -1137,10 +1688,12 @@ function drawMinimap() {
   mmCtx.clearRect(0, 0, MM_SIZE, MM_SIZE);
   mmCtx.drawImage(mmBg, 0, 0);
   const [px, pz] = worldToMM(car.pos.x, car.pos.z);
-  mmCtx.save(); mmCtx.translate(px, pz); mmCtx.rotate(car.angle);
-  mmCtx.fillStyle = '#b7c9a8';
-  mmCtx.beginPath(); mmCtx.moveTo(0, -5); mmCtx.lineTo(3.5, 4); mmCtx.lineTo(-3.5, 4);
-  mmCtx.closePath(); mmCtx.fill(); mmCtx.restore();
+  mmCtx.save(); mmCtx.translate(px, pz); mmCtx.rotate(-car.angle);
+  mmCtx.fillStyle = '#CC0018';
+  mmCtx.beginPath(); mmCtx.moveTo(0, 5); mmCtx.lineTo(3.5, -3); mmCtx.lineTo(1.5, -2); mmCtx.lineTo(-1.5, -2); mmCtx.lineTo(-3.5, -3);
+  mmCtx.closePath(); mmCtx.fill();
+  mmCtx.strokeStyle = '#ff6666'; mmCtx.lineWidth = 0.8; mmCtx.stroke();
+  mmCtx.restore();
   mmCtx.fillStyle = '#ffffff';
   mmCtx.beginPath(); mmCtx.arc(px, pz, 2, 0, Math.PI * 2); mmCtx.fill();
 }
@@ -1149,12 +1702,7 @@ function drawMinimap() {
 // ─────────────────────────────────────────────────
 //  HUD
 // ─────────────────────────────────────────────────
-const elSpeed = document.getElementById('speed-value');
-const elGear  = document.getElementById('gear-display');
-function updateHUD() {
-  elSpeed.textContent = Math.round(Math.abs(car.speed) * 3.6);
-  elGear.textContent  = car.speed >= -0.05 ? 'D' : 'R';
-}
+function updateHUD() { drawSpeedGauge(); }
 
 
 // ─────────────────────────────────────────────────
@@ -1170,6 +1718,10 @@ function gameLoop(ts) {
   updateCar(dt);
   updateCamera(dt);
   updateHUD();
+  updateSound();
+  updateTrafficLights(dt);
+  updateExhaust(dt);
+  updateSkids(dt);
   drawMinimap();
   renderer.render(scene, camera);
 }
@@ -1184,8 +1736,9 @@ function setProgress(p) { loadBar.style.width = p + '%'; }
 
 function init() {
   setProgress(10); buildCity();
-  setProgress(60); createCar();
-  setProgress(90); precomputeMinimapBg();
+  setProgress(55); createCar();
+  setProgress(80); initExhaust(); initSkidPool();
+  setProgress(92); precomputeMinimapBg();
   setProgress(100);
   renderer.render(scene, camera);
   startBtn.disabled    = false;
@@ -1197,6 +1750,7 @@ function startGame() {
   ss.classList.add('hidden');
   ss.addEventListener('transitionend', () => ss.remove(), { once: true });
   gameRunning = true; lastTime = performance.now();
+  initSound();
   requestAnimationFrame(gameLoop);
   setTimeout(() => document.getElementById('controls-hint').classList.add('fade'), 6000);
 }
